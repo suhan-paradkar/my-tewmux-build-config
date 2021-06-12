@@ -1,0 +1,59 @@
+diff -uNr udev/Makefile.am udev.mod/Makefile.am
+--- udev/Makefile.am	2021-06-04 04:20:12.313491948 +0000
++++ udev.mod/Makefile.am	2021-06-04 04:22:05.136178559 +0000
+@@ -36,7 +36,6 @@
+ 	--enable-rule_generator \
+ 	--enable-floppy \
+ 	--with-selinux \
+-	--enable-gtk-doc \
+ 	--with-systemdsystemunitdir=$$dc_install_base/$(systemdsystemunitdir)
+ 
+ BUILT_SOURCES =
+diff -uNr udev/src/docs/Makefile.am udev.mod/src/docs/Makefile.am
+--- udev/src/docs/Makefile.am	2021-06-04 04:20:12.316492152 +0000
++++ udev.mod/src/docs/Makefile.am	2021-06-04 04:27:33.827574548 +0000
+@@ -81,11 +81,10 @@
+ GTKDOC_LIBS=
+ 
+ # This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
+ 
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += version.xml.in
++EXTRA_DIST = version.xml.in
+ 
+ # Files not to distribute
+ # for --rebuild-types in $(SCAN_OPTIONS), e.g. $(DOC_MODULE).types
+@@ -93,7 +92,3 @@
+ #DISTCLEANFILES +=
+ 
+ # Comment this out if you want your docs-status tested during 'make check'
+-if ENABLE_GTK_DOC
+-#TESTS_ENVIRONMENT = cd $(srcsrc)
+-#TESTS = $(GTKDOC_CHECK)
+-endif
+diff -uNr udev/src/gudev/docs/Makefile.am udev.mod/src/gudev/docs/Makefile.am
+--- udev/src/gudev/docs/Makefile.am	2021-06-04 04:20:12.316492152 +0000
++++ udev.mod/src/gudev/docs/Makefile.am	2021-06-04 04:28:55.204117050 +0000
+@@ -88,11 +88,10 @@
+         $(top_builddir)/libgudev-1.0.la
+ 
+ # This includes the standard gtk-doc make rules, copied by gtkdocize.
+-include $(top_srcdir)/gtk-doc.make
+ 
+ # Other files to distribute
+ # e.g. EXTRA_DIST += version.xml.in
+-EXTRA_DIST += version.xml.in
++EXTRA_DIST = version.xml.in
+ 
+ # Files not to distribute
+ # for --rebuild-types in $(SCAN_OPTIONS), e.g. $(DOC_MODULE).types
+@@ -100,7 +99,3 @@
+ #DISTCLEANFILES +=
+ 
+ # Comment this out if you want your docs-status tested during 'make check'
+-if ENABLE_GTK_DOC
+-#TESTS_ENVIRONMENT = cd $(srcsrc)
+-#TESTS = $(GTKDOC_CHECK)
+-endif

@@ -1,0 +1,12 @@
+diff -uNr Python-3.10.0b2/configure Python-3.10.0b2.mod/configure
+--- Python-3.10.0b2/configure	2021-05-31 11:30:34.000000000 +0000
++++ Python-3.10.0b2.mod/configure	2021-06-09 09:35:41.451743744 +0000
+@@ -10767,7 +10767,7 @@
+ 		 then CCSHARED="-fPIC";
+ 		 else CCSHARED="+z";
+ 		 fi;;
+-	Linux-android*) ;;
++	Linux-android*) CCSHARED="-fPIC";;
+ 	Linux*|GNU*) CCSHARED="-fPIC";;
+ 	FreeBSD*|NetBSD*|OpenBSD*|DragonFly*) CCSHARED="-fPIC";;
+ 	OpenUNIX*|UnixWare*)

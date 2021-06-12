@@ -1,0 +1,42 @@
+diff -uNr xfce4-notifyd-0.6.2/Makefile.am xfce4-notifyd-0.6.2.mod/Makefile.am
+--- xfce4-notifyd-0.6.2/Makefile.am	2020-05-04 22:34:17.000000000 +0000
++++ xfce4-notifyd-0.6.2.mod/Makefile.am	2021-05-29 04:00:20.904937801 +0000
+@@ -208,9 +208,15 @@
+ 	$(distclean_service) \
+ 	$(distclean_autostart)
+ 
+-xfce4-notifyd/xfce-notify-gbus.h:
++xfce4-notifyd/xfce-notify-gbus.h:$(srcdir)/xfce4-notifyd/notify-dbus.xml Makefile
++        $(AM_V_GEN) gdbus-codegen \
++        --interface-prefix org.freedesktop.Notifications \
++        --c-namespace XfceNotify        \
++        --generate-c-code xfce4-notifyd/xfce-notify-gbus \
++        $(srcdir)/xfce4-notifyd/notify-dbus.xml
++
+ xfce4-notifyd/xfce-notify-gbus.c: $(srcdir)/xfce4-notifyd/notify-dbus.xml Makefile
+-	$(AM_V_GEN) $(GDBUS_CODEGEN) \
++	$(AM_V_GEN) gdbus-codegen \
+ 	--interface-prefix org.freedesktop.Notifications \
+ 	--c-namespace XfceNotify 	\
+ 	--generate-c-code xfce4-notifyd/xfce-notify-gbus \
+diff -uNr xfce4-notifyd-0.6.2/Makefile.in xfce4-notifyd-0.6.2.mod/Makefile.in
+--- xfce4-notifyd-0.6.2/Makefile.in	2020-08-31 22:01:43.000000000 +0000
++++ xfce4-notifyd-0.6.2.mod/Makefile.in	2021-05-29 04:01:10.905793437 +0000
+@@ -1937,9 +1937,15 @@
+ 
+ @INTLTOOL_DESKTOP_RULE@
+ 
+-xfce4-notifyd/xfce-notify-gbus.h:
++xfce4-notifyd/xfce-notify-gbus.h:(srcdir)/xfce4-notifyd/notify-dbus.xml Makefile
++        $(AM_V_GEN) gdbus-codegen \
++        --interface-prefix org.freedesktop.Notifications \
++        --c-namespace XfceNotify        \
++        --generate-c-code xfce4-notifyd/xfce-notify-gbus \
++        $(srcdir)/xfce4-notifyd/notify-dbus.xml
++
+ xfce4-notifyd/xfce-notify-gbus.c: $(srcdir)/xfce4-notifyd/notify-dbus.xml Makefile
+-	$(AM_V_GEN) $(GDBUS_CODEGEN) \
++	$(AM_V_GEN) gdbus-codegen \
+ 	--interface-prefix org.freedesktop.Notifications \
+ 	--c-namespace XfceNotify 	\
+ 	--generate-c-code xfce4-notifyd/xfce-notify-gbus \

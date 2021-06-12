@@ -1,0 +1,12 @@
+diff -uNr gtk-3.24.24/gtk/Makefile.am gtk-3.24.24.mod/gtk/Makefile.am
+--- gtk-3.24.24/gtk/Makefile.am	2020-12-06 00:49:26.000000000 +0000
++++ gtk-3.24.24.mod/gtk/Makefile.am	2021-06-05 04:23:00.534115639 +0000
+@@ -1625,7 +1625,7 @@
+ 	--includedir=. \
+ 	--includedir=../gdk
+ 
+-Gtk-3.0.gir: $(INTROSPECTION_SCANNER) libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
++Gtk-3.0.gir: g-ir-scanner libgtk-3.la $(top_builddir)/gdk/Gdk-3.0.gir Makefile
+ Gtk_3_0_gir_SCANNERFLAGS = 			\
+ 	--warn-all				\
+ 	--add-include-path=$(top_builddir)/gdk	\

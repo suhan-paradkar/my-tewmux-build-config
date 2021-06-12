@@ -1,0 +1,262 @@
+diff -uNr kmod/configure.ac kmod.mod/configure.ac
+--- kmod/configure.ac	2021-06-04 04:45:57.248723068 +0000
++++ kmod.mod/configure.ac	2021-06-04 04:57:15.863941674 +0000
+@@ -18,7 +18,6 @@
+ AM_SILENT_RULES([yes])
+ LT_INIT([disable-static pic-only])
+ 
+-AS_IF([test "x$enable_static" = "xyes"], [AC_MSG_ERROR([--enable-static is not supported by kmod])])
+ AS_IF([test "x$enable_largefile" = "xno"], [AC_MSG_ERROR([--disable-largefile is not supported by kmod])])
+ 
+ #####################################################################
+diff -uNr kmod/libkmod/docs/Makefile.am kmod.mod/libkmod/docs/Makefile.am
+--- kmod/libkmod/docs/Makefile.am	2021-06-04 04:45:57.249723136 +0000
++++ kmod.mod/libkmod/docs/Makefile.am	2021-06-04 04:46:57.709840266 +0000
+@@ -27,8 +27,5 @@
+ 
+ EXTRA_DIST =
+ 
+-if ENABLE_GTK_DOC
+-include $(top_srcdir)/libkmod/docs/gtk-doc.make
+-else
+ EXTRA_DIST += libkmod-docs.xml libkmod-sections.txt
+-endif
++
+diff -uNr kmod/shared/util.c kmod.mod/shared/util.c
+--- kmod/shared/util.c	2021-06-04 04:45:57.253723408 +0000
++++ kmod.mod/shared/util.c	2021-06-04 05:45:59.568096528 +0000
+@@ -370,9 +370,7 @@
+ 	if (path_is_absolute(p))
+ 		return strdup(p);
+ 
+-	cwd = get_current_dir_name();
+-	if (!cwd)
+-		return NULL;
++	cwd = NULL;
+ 
+ 	plen = strlen(p);
+ 	cwdlen = strlen(cwd);
+diff -uNr kmod/tools/depmod.c kmod.mod/tools/depmod.c
+--- kmod/tools/depmod.c	2021-06-04 04:45:57.270724566 +0000
++++ kmod.mod/tools/depmod.c	2021-06-04 05:30:09.993408732 +0000
+@@ -83,7 +83,7 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-		"\t%s -[aA] [options] [forced_version]\n"
++		"\tdepmod -[aA] [options] [forced_version]\n"
+ 		"\n"
+ 		"If no arguments (except options) are given, \"depmod -a\" is assumed\n"
+ 		"\n"
+@@ -106,8 +106,7 @@
+ 		"\t-F, --filesyms=FILE  Use the file instead of the\n"
+ 		"\t                     current kernel symbols.\n"
+ 		"\t-E, --symvers=FILE   Use Module.symvers file to check\n"
+-		"\t                     symbol versions.\n",
+-		program_invocation_short_name);
++		"\t                     symbol versions.\n");
+ }
+ 
+ _printf_format_(1, 2)
+diff -uNr kmod/tools/insert.c kmod.mod/tools/insert.c
+--- kmod/tools/insert.c	2021-06-04 04:45:57.270724566 +0000
++++ kmod.mod/tools/insert.c	2021-06-04 05:35:48.380458981 +0000
+@@ -36,10 +36,9 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-	       "\t%s insert [options] module\n"
++	       "\tkmod insert [options] module\n"
+ 	       "Options:\n"
+-	       "\t-h, --help        show this help\n",
+-	       program_invocation_short_name);
++	       "\t-h, --help        show this help\n");
+ }
+ 
+ static const char *mod_strerror(int err)
+diff -uNr kmod/tools/insmod.c kmod.mod/tools/insmod.c
+--- kmod/tools/insmod.c	2021-06-04 04:45:57.270724566 +0000
++++ kmod.mod/tools/insmod.c	2021-06-04 05:19:16.971926954 +0000
+@@ -39,11 +39,10 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-		"\t%s [options] filename [args]\n"
++		"\thelp [options] filename [args]\n"
+ 		"Options:\n"
+ 		"\t-V, --version     show version\n"
+-		"\t-h, --help        show this help\n",
+-		program_invocation_short_name);
++		"\t-h, --help        show this help\n"		);
+ }
+ 
+ static const char *mod_strerror(int err)
+diff -uNr kmod/tools/kmod.c kmod.mod/tools/kmod.c
+--- kmod/tools/kmod.c	2021-06-04 04:45:57.270724566 +0000
++++ kmod.mod/tools/kmod.c	2021-06-04 05:03:16.074476020 +0000
+@@ -169,11 +169,12 @@
+ int main(int argc, char *argv[])
+ {
+ 	int err;
+-
++	#ifndef __ANDROID__
+ 	if (streq(program_invocation_short_name, "kmod"))
+ 		err = handle_kmod_commands(argc, argv);
+ 	else
+ 		err = handle_kmod_compat_commands(argc, argv);
+ 
+ 	return err;
++	#endif
+ }
+diff -uNr kmod/tools/log.c kmod.mod/tools/log.c
+--- kmod/tools/log.c	2021-06-04 04:45:57.270724566 +0000
++++ kmod.mod/tools/log.c	2021-06-04 05:39:49.967915427 +0000
+@@ -84,11 +84,11 @@
+ #endif
+ 	} else {
+ #ifdef ENABLE_DEBUG
+-		fprintf(stderr, "%s: %s: %s:%d %s() %s",
+-			program_invocation_short_name, prioname, file, line,
++		fprintf(stderr, "log: %s: %s:%d %s() %s",
++			 prioname, file, line,
+ 			fn, str);
+ #else
+-		fprintf(stderr, "%s: %s: %s", program_invocation_short_name,
++		fprintf(stderr, "log: %s: %s",
+ 			prioname, str);
+ #endif
+ 	}
+@@ -101,7 +101,7 @@
+ 	log_use_syslog = use_syslog;
+ 
+ 	if (log_use_syslog)
+-		openlog(program_invocation_short_name, LOG_CONS, LOG_DAEMON);
++		openlog(log_kmod, LOG_CONS, LOG_DAEMON);
+ }
+ 
+ void log_close(void)
+@@ -132,7 +132,7 @@
+ 	if (log_use_syslog)
+ 		syslog(prio, "%s: %s", prioname, msg);
+ 	else
+-		fprintf(stderr, "%s: %s: %s", program_invocation_short_name,
++		fprintf(stderr, "log: %s: %s",
+ 			prioname, msg);
+ 	free(msg);
+ 
+diff -uNr kmod/tools/modinfo.c kmod.mod/tools/modinfo.c
+--- kmod/tools/modinfo.c	2021-06-04 04:45:57.271724634 +0000
++++ kmod.mod/tools/modinfo.c	2021-06-04 05:31:49.099159615 +0000
+@@ -333,7 +333,7 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-		"\t%s [options] filename [args]\n"
++		"\tmodinfo [options] filename [args]\n"
+ 		"Options:\n"
+ 		"\t-a, --author                Print only 'author'\n"
+ 		"\t-d, --description           Print only 'description'\n"
+@@ -345,8 +345,7 @@
+ 		"\t-k, --set-version=VERSION   Use VERSION instead of `uname -r`\n"
+ 		"\t-b, --basedir=DIR           Use DIR as filesystem root for /lib/modules\n"
+ 		"\t-V, --version               Show version\n"
+-		"\t-h, --help                  Show this help\n",
+-		program_invocation_short_name);
++		"\t-h, --help                  Show this help\n");
+ }
+ 
+ static bool is_module_filename(const char *name)
+diff -uNr kmod/tools/modprobe.c kmod.mod/tools/modprobe.c
+--- kmod/tools/modprobe.c	2021-06-04 04:45:57.271724634 +0000
++++ kmod.mod/tools/modprobe.c	2021-06-04 05:27:29.218457071 +0000
+@@ -96,12 +96,12 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-		"\t%s [options] [-i] [-b] modulename\n"
+-		"\t%s [options] -a [-i] [-b] modulename [modulename...]\n"
+-		"\t%s [options] -r [-i] modulename\n"
+-		"\t%s [options] -r -a [-i] modulename [modulename...]\n"
+-		"\t%s [options] -c\n"
+-		"\t%s [options] --dump-modversions filename\n"
++		"\tkmod [options] [-i] [-b] modulename\n"
++		"\tkmod [options] -a [-i] [-b] modulename [modulename...]\n"
++		"\tkmod [options] -r [-i] modulename\n"
++		"\tkmod [options] -r -a [-i] modulename [modulename...]\n"
++		"\tkmod [options] -c\n"
++		"\tkmod [options] --dump-modversions filename\n"
+ 		"Management Options:\n"
+ 		"\t-a, --all                   Consider every non-argument to\n"
+ 		"\t                            be a module name to be inserted\n"
+@@ -139,10 +139,7 @@
+ 		"\t-q, --quiet                 disable messages\n"
+ 		"\t-v, --verbose               enables more messages\n"
+ 		"\t-V, --version               show version\n"
+-		"\t-h, --help                  show this help\n",
+-		program_invocation_short_name, program_invocation_short_name,
+-		program_invocation_short_name, program_invocation_short_name,
+-		program_invocation_short_name, program_invocation_short_name);
++		"\t-h, --help                  show this help\n");
+ }
+ 
+ _printf_format_(1, 2)
+diff -uNr kmod/tools/remove.c kmod.mod/tools/remove.c
+--- kmod/tools/remove.c	2021-06-04 04:45:57.271724634 +0000
++++ kmod.mod/tools/remove.c	2021-06-04 05:36:24.730935099 +0000
+@@ -36,10 +36,9 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-	       "\t%s remove [options] module\n"
++	       "\tkmod remove [options] module\n"
+ 	       "Options:\n"
+-	       "\t-h, --help        show this help\n",
+-	       program_invocation_short_name);
++	       "\t-h, --help        show this help\n");
+ }
+ 
+ static int check_module_inuse(struct kmod_module *mod) {
+diff -uNr kmod/tools/rmmod.c kmod.mod/tools/rmmod.c
+--- kmod/tools/rmmod.c	2021-06-04 04:45:57.271724634 +0000
++++ kmod.mod/tools/rmmod.c	2021-06-04 05:23:09.705779641 +0000
+@@ -49,7 +49,7 @@
+ static void help(void)
+ {
+ 	printf("Usage:\n"
+-		"\t%s [options] modulename ...\n"
++		"\thelp [options] modulename ...\n"
+ 		"Options:\n"
+ 		"\t-f, --force       forces a module unload and may crash your\n"
+ 		"\t                  machine. This requires Forced Module Removal\n"
+@@ -57,8 +57,7 @@
+ 		"\t-s, --syslog      print to syslog, not stderr\n"
+ 		"\t-v, --verbose     enables more messages\n"
+ 		"\t-V, --version     show version\n"
+-		"\t-h, --help        show this help\n",
+-		program_invocation_short_name);
++		"\t-h, --help        show this help\n"		);
+ }
+ 
+ static int check_module_inuse(struct kmod_module *mod) {
+diff -uNr kmod/tools/static-nodes.c kmod.mod/tools/static-nodes.c
+--- kmod/tools/static-nodes.c	2021-06-04 04:45:57.271724634 +0000
++++ kmod.mod/tools/static-nodes.c	2021-06-04 05:32:35.997354225 +0000
+@@ -132,7 +132,7 @@
+ 	size_t i;
+ 
+ 	printf("Usage:\n"
+-	       "\t%s static-nodes [options]\n"
++	       "\tkmod static-nodes [options]\n"
+ 	       "\n"
+ 	       "kmod static-nodes outputs the static-node information of the currently running kernel.\n"
+ 	       "\n"
+@@ -141,8 +141,7 @@
+ 	       "\t-o, --output=FILE    write output to file\n"
+ 	       "\t-h, --help           show this help\n"
+ 	       "\n"
+-	       "Formats:\n",
+-	 program_invocation_short_name);
++	       "Formats:\n");
+ 
+ 	for (i = 0; i < ARRAY_SIZE(static_nodes_formats); i++) {
+ 		if (static_nodes_formats[i]->description != NULL) {

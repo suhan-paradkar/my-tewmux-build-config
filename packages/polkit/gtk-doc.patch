@@ -1,0 +1,15 @@
+diff -uNr polkit/docs/polkit/Makefile.am polkit.mod/docs/polkit/Makefile.am
+--- polkit/docs/polkit/Makefile.am	2021-05-27 03:12:36.447496215 +0000
++++ polkit.mod/docs/polkit/Makefile.am	2021-05-27 03:14:21.907495101 +0000
+@@ -80,11 +80,7 @@
+ # Extra options to supply to gtkdoc-fixref
+ FIXXREF_OPTIONS=
+ 
+-if ENABLE_GTK_DOC
+-include $(top_srcdir)/gtk-doc.make
+-else
+ CLEANFILES =
+-endif
+ 
+ EXTRA_DIST = meson.build
+ 
