@@ -5,7 +5,7 @@ TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=2.31.1
 TERMUX_PKG_SRCURL=https://www.kernel.org/pub/software/scm/git/git-${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=9f61417a44d5b954a5012b6f34e526a3336dcf5dd720e2bb7ada92ad8b3d6680
-TERMUX_PKG_DEPENDS="libcurl, libiconv, less, openssl, pcre2, zlib"
+TERMUX_PKG_DEPENDS="libcurl, libiconv, less, openssl, pcre2, zlib, libexpat"
 
 ## This requires a working $TERMUX_PREFIX/bin/sh on the host building:
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
@@ -22,24 +22,15 @@ ac_cv_snprintf_returns_bogus=no
 TERMUX_PKG_EXTRA_MAKE_ARGS="
 NO_NSEC=1
 NO_GETTEXT=1
-NO_EXPAT=1
-NO_INSTALL_HARDLINKS=1
 PERL_PATH=$TERMUX_PREFIX/bin/perl
 USE_LIBPCRE2=1
+NO_INSTALL_HARDLINKS=1
 "
 TERMUX_PKG_BUILD_IN_SRC=true
 
 # Things to remove to save space:
 #  bin/git-cvsserver - server emulating CVS
 #  bin/git-shell - restricted login shell for Git-only SSH access
-TERMUX_PKG_RM_AFTER_INSTALL="
-bin/git-cvsserver
-bin/git-shell
-libexec/git-core/git-shell
-libexec/git-core/git-cvsserver
-share/man/man1/git-cvsserver.1
-share/man/man1/git-shell.1
-"
 
 termux_step_pre_configure() {
 	# Certain packages are not safe to build on device because their

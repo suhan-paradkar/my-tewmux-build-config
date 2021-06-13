@@ -7,5 +7,5 @@ TERMUX_PKG_SRCURL=https://github.com/openjdk/mobile.git
 TERMUX_PKG_GIT_BRANCH=master
 TERMUX_PKG_BUILD_IN_SRC=true
 termux_step_configure() {
-bash ./configure  --with-toolchain-type=clang --with-extra-cflags="-fstack-protector-strong -Oz" --with-extra-cxxflags="-fstack-protector-strong -Oz" --with-extra-ldflags="-L/data/data/com.termux/files/usr/lib -Wl,-rpath=/data/data/com.termux/files/usr/lib -fopenmp -static-openmp -Wl,--enable-new-dtags -Wl,--as-needed -Wl,-z,relro,-z,now" --openjdk-target=$TERMUX_ARCH-linux-android
+bash ./configure --openjdk-target=aarch64-linux-android --with-extra-cflags="-fstack-protector-strong -Oz" --with-extra-cxxflags="-fstack-protector-strong -Oz" --with-extra-ldflags="-L/data/data/com.termux/files/usr/lib -Wl,-rpath=/data/data/com.termux/files/usr/lib -fopenmp -static-openmp -Wl,--enable-new-dtags -Wl,--as-needed -Wl,-z,relro,-z,now" --openjdk-target=$TERMUX_ARCH-linux-android
 }
