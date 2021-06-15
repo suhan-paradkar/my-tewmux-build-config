@@ -1,0 +1,53 @@
+diff -uNr qemu-5.2.0/configure qemu-5.2.0.mod/configure
+--- qemu-5.2.0/configure	2020-12-08 16:59:44.000000000 +0000
++++ qemu-5.2.0.mod/configure	2021-06-15 06:21:03.025870071 +0000
+@@ -4502,25 +4502,10 @@
+ 
+ ##########################################
+ # spice probe
+-if test "$spice" != "no" ; then
+-  cat > $TMPC << EOF
+-#include <spice.h>
+-int main(void) { spice_server_new(); return 0; }
+-EOF
+   spice_cflags=$($pkg_config --cflags spice-protocol spice-server 2>/dev/null)
+   spice_libs=$($pkg_config --libs spice-protocol spice-server 2>/dev/null)
+-  if $pkg_config --atleast-version=0.12.5 spice-server && \
+-     $pkg_config --atleast-version=0.12.3 spice-protocol && \
+-     compile_prog "$spice_cflags" "$spice_libs" ; then
+     spice="yes"
+-  else
+-    if test "$spice" = "yes" ; then
+-      feature_not_found "spice" \
+-          "Install spice-server(>=0.12.5) and spice-protocol(>=0.12.3) devel"
+-    fi
+-    spice="no"
+-  fi
+-fi
++
+ 
+ # check for smartcard support
+ if test "$smartcard" != "no"; then
+diff -uNr qemu-5.2.0/meson.build qemu-5.2.0.mod/meson.build
+--- qemu-5.2.0/meson.build	2020-12-08 16:59:44.000000000 +0000
++++ qemu-5.2.0.mod/meson.build	2021-06-15 09:06:06.241682877 +0000
+@@ -107,6 +107,10 @@
+ add_project_link_arguments(config_host['QEMU_LDFLAGS'].split(),
+                            native: false, language: ['c', 'cpp', 'objc'])
+ 
++add_project_arguments('-I@TERMUX_PREFIX@/include/spice-server/',
++			'-I@TERMUX_PREFIX@/include/spice-1/',
++			language: ['c', 'cpp'])
++
+ if targetos == 'linux'
+   add_project_arguments('-isystem', meson.current_source_dir() / 'linux-headers',
+                         '-isystem', 'linux-headers',
+@@ -362,7 +366,7 @@
+ spice = not_found
+ spice_headers = not_found
+ if 'CONFIG_SPICE' in config_host
+-  spice = declare_dependency(compile_args: config_host['SPICE_CFLAGS'].split(),
++  spice = declare_dependency(compile_args: '-I@TERMUX_PREFIX@/include/spice-server',
+                              link_args: config_host['SPICE_LIBS'].split())
+   spice_headers = declare_dependency(compile_args: config_host['SPICE_CFLAGS'].split())
+ endif
