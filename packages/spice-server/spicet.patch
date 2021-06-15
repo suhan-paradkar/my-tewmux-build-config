@@ -1,0 +1,26 @@
+diff -uNr spice/meson.build spice.mod/meson.build
+--- spice/meson.build	2021-06-15 03:42:18.377936154 +0000
++++ spice.mod/meson.build	2021-06-15 03:49:55.691631617 +0000
+@@ -41,7 +41,8 @@
+ spice_server_global_cflags = ['-DSPICE_SERVER_INTERNAL',
+                               '-DG_LOG_DOMAIN="Spice"',
+                               '-Wno-sign-compare',
+-                              '-Wno-unused-parameter']
++                              '-Wno-unused-parameter',
++			      '-I@TERMUX_PREFIX@/include/spice-1/']
+ 
+ compiler = meson.get_compiler('c')
+ cxx_compiler = meson.get_compiler('cpp')
+diff -uNr spice/subprojects/spice-common/meson.build spice.mod/subprojects/spice-common/meson.build
+--- spice/subprojects/spice-common/meson.build	2021-06-15 03:43:07.408062556 +0000
++++ spice.mod/subprojects/spice-common/meson.build	2021-06-15 03:46:34.158574667 +0000
+@@ -12,7 +12,8 @@
+ 
+ # some global vars
+ spice_common_global_cflags = ['-DG_LOG_DOMAIN="Spice"',
+-                              '-Wno-unused-parameter']
++                              '-Wno-unused-parameter',
++			      '-I@TERMUX_PREFIX@/include/spice-1/']
+ 
+ if get_option('alignment-checks')
+   spice_common_global_cflags += ['-DSPICE_DEBUG_ALIGNMENT']

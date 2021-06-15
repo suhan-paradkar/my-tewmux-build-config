@@ -1,0 +1,37 @@
+--- spice/server/meson.build	2021-06-14 10:10:06.559688771 +0000
++++ spice.mod/server/meson.build	2021-06-14 10:13:25.483102293 +0000
+@@ -8,14 +8,27 @@
+   minor = '0'
+   micro = '1'
+ else
+-  version_info = meson.project_version().split('.')
+-  major = '@0@'.format(version_info[0])
+-  minor = '@0@'.format(version_info[1])
+-  micro = version_info[2].to_int()
+-  if version_info.length() >= 4
+-    micro += 1
++  additional_commits = false
++  increment_micro = 0
++  # remove the "-dirty" from version, increment micro later if found
++  version_info = meson.project_version().split('-dirty')
++  if version_info.length() > 1
++    increment_micro = 1
+   endif
+-  micro = '@0@'.format(micro)
++  # remove the "-" from version, increment micro later if found
++  version_info = version_info[0].split('-')
++  if version_info.length() > 1
++    additional_commits = true
++    increment_micro = 1
++  endif
++  version_info = version_info[0].split('.')
++  if ((not additional_commits and version_info.length() != 3)
++    or (additional_commits and version_info.length() != 4))
++    error('Invalid version @0@'.format(meson.project_version()))
++  endif
++  major = '@0@'.format(version_info[0].to_int())
++  minor = '@0@'.format(version_info[1].to_int())
++  micro = '@0@'.format(version_info[2].to_int() + increment_micro)
+ endif
+ 
+ cmd = run_command('printf', ['0x%02x%02x%02x', major, minor, micro], check : true)

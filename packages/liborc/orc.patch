@@ -1,0 +1,19 @@
+diff -uNr orc/orc/orcprogram-neon.c orc.mod/orc/orcprogram-neon.c
+--- orc/orc/orcprogram-neon.c	2021-06-14 10:01:58.363223589 +0000
++++ orc.mod/orc/orcprogram-neon.c	2021-06-14 10:02:42.524979440 +0000
+@@ -126,13 +126,14 @@
+ void
+ orc_neon_init (void)
+ {
++#ifndef __ANDROID__
+ #if defined(HAVE_ARM)
+   if (!(orc_arm_get_cpu_flags () & ORC_TARGET_NEON_NEON)) {
+     ORC_INFO("marking neon backend non-executable");
+     neon_target.executable = FALSE;
+   }
+ #endif
+-
++#endif
+   orc_target_register (&neon_target);
+ 
+   orc_compiler_neon_register_rules (&neon_target);

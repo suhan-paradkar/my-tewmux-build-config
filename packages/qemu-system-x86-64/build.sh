@@ -6,7 +6,7 @@ TERMUX_PKG_VERSION=1:5.2.0
 TERMUX_PKG_REVISION=5
 TERMUX_PKG_SRCURL=https://download.qemu.org/qemu-${TERMUX_PKG_VERSION:2}.tar.xz
 TERMUX_PKG_SHA256="cb18d889b628fbe637672b0326789d9b0e3b8027e0445b936537c78549df17bc"
-TERMUX_PKG_DEPENDS="attr, glib, libbz2, libc++, libcap-ng, libcurl, libgcrypt, libiconv, libjpeg-turbo, liblzo, libnfs, libpixman, libpng, libssh, libx11, ncurses, qemu-common, resolv-conf, sdl2, sdl2-image, zlib"
+TERMUX_PKG_DEPENDS="attr, glib, libbz2, libc++, libcap-ng, libcurl, libgcrypt, libiconv, libjpeg-turbo, liblzo, libnfs, libpixman, libpng, libssh, libx11, ncurses, qemu-common, resolv-conf, sdl2, sdl2-image, zlib, gtk3, libvte"
 TERMUX_PKG_CONFLICTS="qemu-system-x86_64, qemu-system-x86_64-headless, qemu-system-x86-64-headless"
 TERMUX_PKG_REPLACES="qemu-system-x86_64, qemu-system-x86_64-headless, qemu-system-x86-64-headless"
 TERMUX_PKG_PROVIDES="qemu-system-x86_64"
@@ -82,8 +82,8 @@ termux_step_configure() {
 		--enable-gcrypt \
 		--enable-sdl \
 		--enable-sdl-image \
-		--disable-gtk \
-		--disable-vte \
+		--enable-gtk \
+		--enable-vte \
 		--enable-curses \
 		--enable-iconv \
 		--enable-vnc \
@@ -105,6 +105,7 @@ termux_step_configure() {
 		--disable-snappy \
 		--enable-bzip2 \
 		--disable-lzfse \
+		--enable-spice \
 		--disable-seccomp \
 		--enable-libssh \
 		--enable-libxml2 \
@@ -113,8 +114,7 @@ termux_step_configure() {
 		--enable-dmg \
 		--enable-parallels \
 		--enable-qed \
-		--enable-sheepdog \
-		--target-list="$QEMU_TARGETS"
+		--enable-sheepdog
 }
 
 termux_step_post_make_install() {

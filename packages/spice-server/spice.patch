@@ -1,0 +1,32 @@
+diff -uNr spice/subprojects/spice-common/common/agent.h spice.mod/subprojects/spice-common/common/agent.h
+--- spice/subprojects/spice-common/common/agent.h	2021-06-14 10:22:51.744439028 +0000
++++ spice.mod/subprojects/spice-common/common/agent.h	2021-06-14 10:26:28.629973471 +0000
+@@ -17,12 +17,12 @@
+ */
+ #pragma once
+ 
+-#include <spice/macros.h>
+-#include <spice/vd_agent.h>
++#include <spice-1/spice/macros.h>
++#include <spice-1/spice/vd_agent.h>
+ 
+ SPICE_BEGIN_DECLS
+ 
+-#include <spice/start-packed.h>
++#include <spice-1/spice/start-packed.h>
+ 
+ /* This helper macro is to define a structure in a way compatible with
+  * Microsoft compiler */
+diff -uNr spice/subprojects/spice-common/meson.build spice.mod/subprojects/spice-common/meson.build
+--- spice/subprojects/spice-common/meson.build	2021-06-14 10:22:51.752439528 +0000
++++ spice.mod/subprojects/spice-common/meson.build	2021-06-14 10:46:00.743117822 +0000
+@@ -101,8 +101,7 @@
+   spice_protocol_version = spice_protocol_version_req
+ endif
+ 
+-deps = {'spice-protocol' : '>= @0@'.format(spice_protocol_version),
+-        'glib-2.0'       : glib_version_info,
++deps = {'glib-2.0'       : glib_version_info,
+         'pixman-1'       : '>= 0.17.7',
+         'openssl'        : '>= 1.0.0'}
+ 
