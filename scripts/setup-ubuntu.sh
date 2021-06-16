@@ -12,7 +12,7 @@ PACKAGES+=" libwayland-dev"
 PACKAGES+=" sassc"
 PACKAGES+=" wget"
 PACKAGES+=" openjdk-11-jdk"
-PACKAGES+=" android-sdk"
+
 # Used by build-package.sh and CI/CD scripts.
 PACKAGES+=" curl"
 PACKAGES+=" gnupg"

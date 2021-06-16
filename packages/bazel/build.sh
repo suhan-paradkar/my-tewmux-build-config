@@ -18,7 +18,7 @@ sudo apt install bazel
 
 termux_step_configure() {
 LDFLAGS+=" -llog"
-bazel build //src:bazel-dev --compilation_mode=opt
+bazel build //src:bazel-dev --compilation_mode=opt -copts="-llog"
 }
 termux_step_make() {
 return 0
