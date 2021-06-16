@@ -1,0 +1,65 @@
+diff -uNr alsa-lib-1.2.5.1/configure alsa-lib-1.2.5.1.mod/configure
+--- alsa-lib-1.2.5.1/configure	2021-06-14 11:44:12.000000000 +0000
++++ alsa-lib-1.2.5.1.mod/configure	2021-06-16 09:39:30.715096267 +0000
+@@ -12752,14 +12752,7 @@
+ 
+ test "x$prefix" = xNONE && prefix=$ac_default_prefix
+ 
+-if test "$enable_static" = "$enable_shared" -a "$enable_static" = "yes"; then
+-cat <<EOF
+-  Please, do not try to compile static and shared libraries together.
+-  See INSTALL file for more details (do not use --enable-shared=yes with
+-  --enable-static=yes).
+-EOF
+-  exit 1
+-fi
++
+ 
+ 
+ # Check whether --with-configdir was given.
+diff -uNr alsa-lib-1.2.5.1/include/mixer.h alsa-lib-1.2.5.1.mod/include/mixer.h
+--- alsa-lib-1.2.5.1/include/mixer.h	2021-06-14 10:28:44.000000000 +0000
++++ alsa-lib-1.2.5.1.mod/include/mixer.h	2021-06-16 09:41:14.274996780 +0000
+@@ -209,10 +209,12 @@
+ 	enum snd_mixer_selem_regopt_abstract abstract;
+ 	/** v1: device name (must be NULL when playback_pcm or capture_pcm != NULL) */
+ 	const char *device;
++	#ifndef __ANDROID__
+ 	/** v1: playback PCM connected to mixer device (NULL == none) */
+ 	snd_pcm_t *playback_pcm;
+ 	/** v1: capture PCM connected to mixer device (NULL == none) */
+ 	snd_pcm_t *capture_pcm;
++	#endif
+ };
+ 
+ /** Mixer simple element identifier */
+diff -uNr alsa-lib-1.2.5.1/src/conf.c alsa-lib-1.2.5.1.mod/src/conf.c
+--- alsa-lib-1.2.5.1/src/conf.c	2021-06-14 10:28:44.000000000 +0000
++++ alsa-lib-1.2.5.1.mod/src/conf.c	2021-06-16 09:51:27.502411247 +0000
+@@ -4059,7 +4059,7 @@
+ 	if (!S_ISDIR(st.st_mode))
+ 		return config_file_open(root, fn);
+ #ifndef DOC_HIDDEN
+-#if defined(_GNU_SOURCE) && !defined(__NetBSD__) && !defined(__FreeBSD__) && !defined(__sun) && !defined(ANDROID)
++#if defined(_GNU_SOURCE) && !defined(__NetBSD__) && !defined(__FreeBSD__) && !defined(__sun) && !defined(__ANDROID__)
+ #define SORTFUNC	versionsort
+ #else
+ #define SORTFUNC	alphasort
+diff -uNr alsa-lib-1.2.5.1/src/ucm/parser.c alsa-lib-1.2.5.1.mod/src/ucm/parser.c
+--- alsa-lib-1.2.5.1/src/ucm/parser.c	2021-06-14 10:28:44.000000000 +0000
++++ alsa-lib-1.2.5.1.mod/src/ucm/parser.c	2021-06-16 09:50:00.425494293 +0000
+@@ -2478,11 +2478,13 @@
+ 		snprintf(filename, sizeof(filename), "%s/ucm2/conf.virt.d",
+ 			 snd_config_topdir());
+ 
+-#if defined(_GNU_SOURCE) && !defined(__NetBSD__) && !defined(__FreeBSD__) && !defined(__sun) && !defined(ANDROID)
++#if defined(_GNU_SOURCE) && !defined(__NetBSD__) && !defined(__FreeBSD__) && !defined(__sun) 
++#ifndef __ANDROID__
+ #define SORTFUNC	versionsort
+ #else
+ #define SORTFUNC	alphasort
+ #endif
++#endif
+ 	err = scandir(filename, &namelist, filename_filter, SORTFUNC);
+ 	if (err < 0) {
+ 		err = -errno;
