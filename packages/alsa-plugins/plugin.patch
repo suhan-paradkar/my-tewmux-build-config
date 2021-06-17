@@ -1,0 +1,100 @@
+diff -uNr alsa-plugins-1.2.5/arcam-av/arcam_av.c alsa-plugins-1.2.5.mod/arcam-av/arcam_av.c
+--- alsa-plugins-1.2.5/arcam-av/arcam_av.c	2021-05-27 17:18:39.000000000 +0000
++++ alsa-plugins-1.2.5.mod/arcam-av/arcam_av.c	2021-06-17 09:37:20.982048220 +0000
+@@ -513,7 +513,7 @@
+ 	sem_t* semaphore = context;
+ 	const char* port = *(const char**)(semaphore + 1);
+ 
+-	address.sun_family = AF_FILE;
++	address.sun_family = AF_LOCAL;
+ 	address.sun_path[0] = '\0';
+ 	strncpy(&address.sun_path[1], port, sizeof(address.sun_path) - 1);
+ 	size = offsetof(struct sockaddr_un, sun_path) +
+@@ -614,7 +614,7 @@
+ 	if (client_fd < 0)
+ 		return -1;
+ 
+-	address.sun_family = AF_FILE;
++	address.sun_family = AF_LOCAL;
+ 	address.sun_path[0] = '\0';
+ 	strncpy(&address.sun_path[1], port, sizeof(address.sun_path) - 1);
+ 	size = offsetof(struct sockaddr_un, sun_path) +
+diff -uNr alsa-plugins-1.2.5/arcam-av/Makefile.am alsa-plugins-1.2.5.mod/arcam-av/Makefile.am
+--- alsa-plugins-1.2.5/arcam-av/Makefile.am	2021-05-27 17:18:39.000000000 +0000
++++ alsa-plugins-1.2.5.mod/arcam-av/Makefile.am	2021-06-17 09:38:44.614119113 +0000
+@@ -12,7 +12,7 @@
+ AM_LDFLAGS = -module -avoid-version -export-dynamic -no-undefined
+ 
+ libasound_module_ctl_arcam_av_la_SOURCES = ctl_arcam_av.c arcam_av.c arcam_av.h
+-libasound_module_ctl_arcam_av_la_LIBADD = @ALSA_LIBS@ -lpthread
++libasound_module_ctl_arcam_av_la_LIBADD = @ALSA_LIBS@
+ 
+ include ../install-hooks.am
+ 
+diff -uNr alsa-plugins-1.2.5/arcam-av/Makefile.in alsa-plugins-1.2.5.mod/arcam-av/Makefile.in
+--- alsa-plugins-1.2.5/arcam-av/Makefile.in	2021-05-27 20:06:35.000000000 +0000
++++ alsa-plugins-1.2.5.mod/arcam-av/Makefile.in	2021-06-17 09:39:13.294886845 +0000
+@@ -360,7 +360,7 @@
+ AM_CFLAGS = -Wall -g @ALSA_CFLAGS@
+ AM_LDFLAGS = -module -avoid-version -export-dynamic -no-undefined
+ libasound_module_ctl_arcam_av_la_SOURCES = ctl_arcam_av.c arcam_av.c arcam_av.h
+-libasound_module_ctl_arcam_av_la_LIBADD = @ALSA_LIBS@ -lpthread
++libasound_module_ctl_arcam_av_la_LIBADD = @ALSA_LIBS@
+ all: all-am
+ 
+ .SUFFIXES:
+diff -uNr alsa-plugins-1.2.5/maemo/Makefile.am alsa-plugins-1.2.5.mod/maemo/Makefile.am
+--- alsa-plugins-1.2.5/maemo/Makefile.am	2021-05-27 17:18:39.000000000 +0000
++++ alsa-plugins-1.2.5.mod/maemo/Makefile.am	2021-06-17 09:40:34.313705023 +0000
+@@ -14,10 +14,10 @@
+ AM_LDFLAGS = -module -avoid-version -export-dynamic -no-undefined $(LDFLAGS_NOUNDEFINED)
+ 
+ libasound_module_pcm_alsa_dsp_la_SOURCES = dsp-protocol.c alsa-dsp.c
+-libasound_module_pcm_alsa_dsp_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS) -lpthread 
++libasound_module_pcm_alsa_dsp_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS)
+ 
+ libasound_module_ctl_dsp_ctl_la_SOURCES = dsp-protocol.c dsp-ctl.c
+-libasound_module_ctl_dsp_ctl_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS) -lpthread 
++libasound_module_ctl_dsp_ctl_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS)
+ 
+ noinst_HEADERS = constants.h debug.h dsp-protocol.h list.h reporting.h \
+ 	         types.h
+diff -uNr alsa-plugins-1.2.5/maemo/Makefile.in alsa-plugins-1.2.5.mod/maemo/Makefile.in
+--- alsa-plugins-1.2.5/maemo/Makefile.in	2021-05-27 20:06:35.000000000 +0000
++++ alsa-plugins-1.2.5.mod/maemo/Makefile.in	2021-06-17 09:40:01.290518344 +0000
+@@ -375,9 +375,9 @@
+ AM_CFLAGS = -Wall -O2 @ALSA_CFLAGS@ $(DBUS_CFLAGS)
+ AM_LDFLAGS = -module -avoid-version -export-dynamic -no-undefined $(LDFLAGS_NOUNDEFINED)
+ libasound_module_pcm_alsa_dsp_la_SOURCES = dsp-protocol.c alsa-dsp.c
+-libasound_module_pcm_alsa_dsp_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS) -lpthread 
++libasound_module_pcm_alsa_dsp_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS@
+ libasound_module_ctl_dsp_ctl_la_SOURCES = dsp-protocol.c dsp-ctl.c
+-libasound_module_ctl_dsp_ctl_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS) -lpthread 
++libasound_module_ctl_dsp_ctl_la_LIBADD = @ALSA_LIBS@ $(DBUS_LIBS)
+ noinst_HEADERS = constants.h debug.h dsp-protocol.h list.h reporting.h \
+ 	         types.h
+ 
+diff -uNr alsa-plugins-1.2.5/usb_stream/Makefile.am alsa-plugins-1.2.5.mod/usb_stream/Makefile.am
+--- alsa-plugins-1.2.5/usb_stream/Makefile.am	2021-05-27 17:18:39.000000000 +0000
++++ alsa-plugins-1.2.5.mod/usb_stream/Makefile.am	2021-06-17 09:32:32.976254293 +0000
+@@ -12,7 +12,7 @@
+ AM_LDFLAGS = -module -avoid-version -export-dynamic $(LDFLAGS_NOUNDEFINED)
+ 
+ libasound_module_pcm_usb_stream_la_SOURCES = pcm_usb_stream.c
+-libasound_module_pcm_usb_stream_la_LIBADD = @ALSA_LIBS@ -lpthread
++libasound_module_pcm_usb_stream_la_LIBADD = @ALSA_LIBS@
+ 
+ noinst_HEADERS = usb_stream.h
+ 
+diff -uNr alsa-plugins-1.2.5/usb_stream/Makefile.in alsa-plugins-1.2.5.mod/usb_stream/Makefile.in
+--- alsa-plugins-1.2.5/usb_stream/Makefile.in	2021-05-27 20:06:36.000000000 +0000
++++ alsa-plugins-1.2.5.mod/usb_stream/Makefile.in	2021-06-17 09:32:00.161087474 +0000
+@@ -361,7 +361,7 @@
+ AM_CFLAGS = -Wall -g @ALSA_CFLAGS@
+ AM_LDFLAGS = -module -avoid-version -export-dynamic $(LDFLAGS_NOUNDEFINED)
+ libasound_module_pcm_usb_stream_la_SOURCES = pcm_usb_stream.c
+-libasound_module_pcm_usb_stream_la_LIBADD = @ALSA_LIBS@ -lpthread
++libasound_module_pcm_usb_stream_la_LIBADD = @ALSA_LIBS@
+ noinst_HEADERS = usb_stream.h
+ all: all-am
+ 

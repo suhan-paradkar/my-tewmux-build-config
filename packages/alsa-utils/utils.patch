@@ -1,0 +1,136 @@
+diff -uNr alsa-utils-1.2.5.1/configure alsa-utils-1.2.5.1.mod/configure
+--- alsa-utils-1.2.5.1/configure	2021-06-14 11:45:57.000000000 +0000
++++ alsa-utils-1.2.5.1.mod/configure	2021-06-17 08:28:56.690948667 +0000
+@@ -8051,7 +8051,7 @@
+ 	LDFLAGS="$LDFLAGS $ALSA_LIBS"
+ fi
+ 
+-ALSA_LIBS="$ALSA_LIBS -lasound -lm $LIBDL -lpthread"
++ALSA_LIBS="$ALSA_LIBS -lasound -lm $LIBDL"
+ LIBS="$ALSA_LIBS $LIBS"
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ALSA_LIBS" >&5
+ $as_echo "$ALSA_LIBS" >&6; }
+@@ -8196,9 +8196,6 @@
+ if test "x$enable_alsatest" = "xyes"; then
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for snd_ctl_open in -lasound" >&5
+ $as_echo_n "checking for snd_ctl_open in -lasound... " >&6; }
+-if ${ac_cv_lib_asound_snd_ctl_open+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+   ac_check_lib_save_LIBS=$LIBS
+ LIBS="-lasound  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -8230,27 +8227,17 @@
+ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_asound_snd_ctl_open" >&5
+ $as_echo "$ac_cv_lib_asound_snd_ctl_open" >&6; }
+-if test "x$ac_cv_lib_asound_snd_ctl_open" = xyes; then :
+   cat >>confdefs.h <<_ACEOF
+ #define HAVE_LIBASOUND 1
+ _ACEOF
+ 
+   LIBS="-lasound $LIBS"
+ 
+-else
+-  as_fn_error $? "No linkable libasound was found." "$LINENO" 5
+-	 alsa_found=no
+-
+-fi
+-
+ if test "x$enable_atopology" = "xyes"; then
+ alsa_topology_found=yes
+ alsa_save_LIBS2="$LIBS"
+ { $as_echo "$as_me:${as_lineno-$LINENO}: checking for snd_tplg_new in -latopology" >&5
+ $as_echo_n "checking for snd_tplg_new in -latopology... " >&6; }
+-if ${ac_cv_lib_atopology_snd_tplg_new+:} false; then :
+-  $as_echo_n "(cached) " >&6
+-else
+   ac_check_lib_save_LIBS=$LIBS
+ LIBS="-latopology  $LIBS"
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+@@ -8279,7 +8266,7 @@
+ rm -f core conftest.err conftest.$ac_objext \
+     conftest$ac_exeext conftest.$ac_ext
+ LIBS=$ac_check_lib_save_LIBS
+-fi
++
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_atopology_snd_tplg_new" >&5
+ $as_echo "$ac_cv_lib_atopology_snd_tplg_new" >&6; }
+ if test "x$ac_cv_lib_atopology_snd_tplg_new" = xyes; then :
+@@ -8288,15 +8275,6 @@
+ _ACEOF
+ 
+   LIBS="-latopology $LIBS"
+-
+-else
+-  as_fn_error $? "No linkable libatopology was found." "$LINENO" 5
+-	 alsa_topology_found=no,
+-
+-
+-fi
+-
+-LIBS="$alsa_save_LIBS2"
+ fi
+ else
+ if test "x$enable_atopology" = "xyes"; then
+@@ -8332,15 +8310,6 @@
+ 
+ 
+ 
+-if test "x$enable_alsatest" = "xyes"; then
+-ac_fn_c_check_func "$LINENO" "snd_ctl_elem_add_enumerated" "ac_cv_func_snd_ctl_elem_add_enumerated"
+-if test "x$ac_cv_func_snd_ctl_elem_add_enumerated" = xyes; then :
+-
+-else
+-  as_fn_error $? "No user enum control support in alsa-lib" "$LINENO" 5
+-fi
+-
+-fi
+ 
+ for ac_header in alsa/pcm.h
+ do :
+@@ -8894,16 +8863,13 @@
+ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_m_sqrtf" >&5
+ $as_echo "$ac_cv_lib_m_sqrtf" >&6; }
+-if test "x$ac_cv_lib_m_sqrtf" = xyes; then :
++
+   cat >>confdefs.h <<_ACEOF
+ #define HAVE_LIBM 1
+ _ACEOF
+ 
+   LIBS="-lm $LIBS"
+ 
+-else
+-  as_fn_error $? "Error: Need sqrtf" "$LINENO" 5
+-fi
+ 
+   { $as_echo "$as_me:${as_lineno-$LINENO}: checking for pthread_create in -lpthread" >&5
+ $as_echo_n "checking for pthread_create in -lpthread... " >&6; }
+@@ -8911,7 +8877,7 @@
+   $as_echo_n "(cached) " >&6
+ else
+   ac_check_lib_save_LIBS=$LIBS
+-LIBS="-lpthread  $LIBS"
++
+ cat confdefs.h - <<_ACEOF >conftest.$ac_ext
+ /* end confdefs.h.  */
+ 
+@@ -8941,16 +8907,12 @@
+ fi
+ { $as_echo "$as_me:${as_lineno-$LINENO}: result: $ac_cv_lib_pthread_pthread_create" >&5
+ $as_echo "$ac_cv_lib_pthread_pthread_create" >&6; }
+-if test "x$ac_cv_lib_pthread_pthread_create" = xyes; then :
++
+   cat >>confdefs.h <<_ACEOF
+ #define HAVE_LIBPTHREAD 1
+ _ACEOF
+ 
+-  LIBS="-lpthread $LIBS"
+ 
+-else
+-  as_fn_error $? "Error: need PTHREAD library" "$LINENO" 5
+-fi
+ 
+   FFTW_CFLAGS="$CFLAGS"
+   FFTW_LIB="$LIBS"
