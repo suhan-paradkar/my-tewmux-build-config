@@ -6,4 +6,5 @@ TERMUX_SUBPKG_DEPEND_ON_PARENT=no
 TERMUX_SUBPKG_INCLUDE="
 bin/qemu-system-i386
 share/man/man1/qemu-system-i386.1.gz
+bin/qemu-i386
 "

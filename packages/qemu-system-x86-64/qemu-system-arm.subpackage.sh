@@ -6,4 +6,5 @@ TERMUX_SUBPKG_DEPEND_ON_PARENT=no
 TERMUX_SUBPKG_INCLUDE="
 bin/qemu-system-arm
 share/man/man1/qemu-system-arm.1.gz
+bin/qemu-arm
 "

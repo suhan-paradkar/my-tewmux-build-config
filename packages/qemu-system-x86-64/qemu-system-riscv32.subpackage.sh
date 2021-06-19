@@ -6,4 +6,5 @@ TERMUX_SUBPKG_DEPEND_ON_PARENT=no
 TERMUX_SUBPKG_INCLUDE="
 bin/qemu-system-riscv32
 share/man/man1/qemu-system-riscv32.1.gz
+bin/qemu-riscv32
 "
