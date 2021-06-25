@@ -1,0 +1,115 @@
+diff -uNr systemd/src/basic/env-util.c systemd.mod/src/basic/env-util.c
+--- systemd/src/basic/env-util.c	2021-06-25 10:27:44.138266235 +0000
++++ systemd.mod/src/basic/env-util.c	2021-06-25 11:38:44.299307364 +0000
+@@ -381,7 +381,7 @@
+                 free(p);
+                 return -EINVAL;
+         }
+-
++	#ifndef __ANDROID__
+         name = strndupa(p, t - p);
+ 
+         STRV_FOREACH(f, *l)
+@@ -390,7 +390,7 @@
+                         strv_env_unset(f + 1, *f);
+                         return 0;
+                 }
+-
++	#endif
+         /* We didn't find a match, we need to append p or create a new strv */
+         r = strv_consume(l, p);
+         if (r < 0)
+@@ -413,7 +413,7 @@
+         if (!env_name_is_valid(key))
+                 return -EINVAL;
+ 
+-        /* NULL removes assignment, "" creates an empty assignment. */
++        /* NULL- removes assignment, "" creates an empty assignment. */
+ 
+         if (!value) {
+                 strv_env_unset(*l, key);
+@@ -442,9 +442,10 @@
+ 
+         if (flags & REPLACE_ENV_USE_ENVIRONMENT) {
+                 const char *t;
+-
++		#ifndef __ANDROID__
+                 t = strndupa(name, k);
+-                return getenv(t);
++		#endif
++                return 0;
+         };
+ 
+         return NULL;
+@@ -748,11 +749,11 @@
+ 
+ int getenv_bool_secure(const char *p) {
+         const char *e;
+-
++	#ifndef __ANDROID__
+         e = secure_getenv(p);
+         if (!e)
+                 return -ENXIO;
+-
++	#endif
+         return parse_boolean(e);
+ }
+ 
+@@ -774,13 +775,14 @@
+         e = strchr(assignment, '=');
+         if (!e)
+                 return -EINVAL;
+-
++	#ifndef __ANDROID__
+         n = strndupa(assignment, e - assignment);
+ 
+         /* This is like putenv(), but uses setenv() so that our memory doesn't become part of environ[]. */
+         if (setenv(n, e + 1, override) < 0)
+                 return -errno;
+-        return 0;
++        #endif
++	return 0;
+ }
+ 
+ int setenv_systemd_exec_pid(bool update_only) {
+@@ -788,20 +790,20 @@
+         const char *e;
+ 
+         /* Update $SYSTEMD_EXEC_PID=pid except when '*' is set for the variable. */
+-
++	#ifndef __ANDROID__
+         e = secure_getenv("SYSTEMD_EXEC_PID");
+         if (!e && update_only)
+                 return 0;
+ 
+         if (streq_ptr(e, "*"))
+                 return 0;
+-
++	#endif
+         xsprintf(str, PID_FMT, getpid_cached());
+ 
+         if (setenv("SYSTEMD_EXEC_PID", str, 1) < 0)
+                 return -errno;
+ 
+-        return 1;
++        return 0;
+ }
+ 
+ int getenv_path_list(const char *name, char ***ret_paths) {
+@@ -812,7 +814,7 @@
+ 
+         assert(name);
+         assert(ret_paths);
+-
++	#ifndef __ANDROID__
+         e = secure_getenv(name);
+         if (!e)
+                 return -ENXIO;
+@@ -840,5 +842,6 @@
+                                        "No paths specified, refusing.");
+ 
+         *ret_paths = TAKE_PTR(l);
+-        return 1;
++	#endif
++        return 0;
+ }
