@@ -9,7 +9,7 @@ TERMUX_PKG_DEPENDS="ncurses, libcrypt, zlib"
 TERMUX_PKG_ESSENTIAL=true
 TERMUX_PKG_BREAKS="util-linux-dev"
 TERMUX_PKG_REPLACES="util-linux-dev"
-TERMUX_PKG_CONFLICTS="termux-tools"
+
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 ac_cv_func_setns=yes
 ac_cv_func_unshare=yes
