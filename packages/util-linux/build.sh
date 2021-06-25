@@ -13,6 +13,7 @@ TERMUX_PKG_REPLACES="util-linux-dev"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 ac_cv_func_setns=yes
 ac_cv_func_unshare=yes
+--disable-makeinstall-chown
 --disable-agetty
 --disable-ctrlaltdel
 --disable-eject

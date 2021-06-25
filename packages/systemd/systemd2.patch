@@ -1,0 +1,202 @@
+diff -uNr systemd/meson.build systemd.mod/meson.build
+--- systemd/meson.build	2021-06-25 10:27:44.124266249 +0000
++++ systemd.mod/meson.build	2021-06-25 10:28:32.487218340 +0000
+@@ -910,7 +910,7 @@
+ #####################################################################
+ 
+ threads = dependency('threads')
+-librt = cc.find_library('rt')
++librt = cc.find_library('c')
+ libm = cc.find_library('m')
+ libdl = cc.find_library('dl')
+ libcrypt = cc.find_library('crypt')
+diff -uNr systemd/src/basic/cgroup-util.c systemd.mod/src/basic/cgroup-util.c
+--- systemd/src/basic/cgroup-util.c	2021-06-25 10:27:44.136266237 +0000
++++ systemd.mod/src/basic/cgroup-util.c	2021-06-25 10:59:16.460523032 +0000
+@@ -1082,8 +1082,10 @@
+         if (n < 3)
+                 return -ENXIO;
+ 
++	#ifndef __ANDROID__
+         c = strndupa(cgroup, n);
+         c = cg_unescape(c);
++	#endif
+ 
+         if (!unit_name_is_valid(c, UNIT_NAME_PLAIN|UNIT_NAME_INSTANCE))
+                 return -ENXIO;
+diff -uNr systemd/src/basic/conf-files.c systemd.mod/src/basic/conf-files.c
+--- systemd/src/basic/conf-files.c	2021-06-25 10:27:44.136266237 +0000
++++ systemd.mod/src/basic/conf-files.c	2021-06-25 11:17:54.508477993 +0000
+@@ -170,10 +170,10 @@
+         files = hashmap_get_strv(fh);
+         if (!files)
+                 return -ENOMEM;
+-
++	#ifndef __ANDROID__
+         typesafe_qsort(files, hashmap_size(fh), base_cmp);
+         *strv = files;
+-
++	#endif
+         return 0;
+ }
+ 
+diff -uNr systemd/src/basic/efivars.c systemd.mod/src/basic/efivars.c
+--- systemd/src/basic/efivars.c	2021-06-25 10:27:44.137266236 +0000
++++ systemd.mod/src/basic/efivars.c	2021-06-25 11:27:58.208913174 +0000
+@@ -384,7 +384,7 @@
+         int r;
+ 
+         assert(line);
+-
++	#ifndef __ANDROID__
+         /* For testing purposes it is sometimes useful to be able to override this */
+         e = secure_getenv("SYSTEMD_EFI_OPTIONS");
+         if (e) {
+@@ -397,6 +397,7 @@
+                 *line = m;
+                 return 0;
+         }
++	#endif
+ 
+         cachepath = efi_variable_cache_path(EFI_VENDOR_SYSTEMD, "SystemdOptions");
+         if (!cachepath)
+diff -uNr systemd/src/basic/env-file.c systemd.mod/src/basic/env-file.c
+--- systemd/src/basic/env-file.c	2021-06-25 10:27:44.137266236 +0000
++++ systemd.mod/src/basic/env-file.c	2021-06-25 11:24:20.707117102 +0000
+@@ -506,7 +506,7 @@
+ 
+ static void write_env_var(FILE *f, const char *v) {
+         const char *p;
+-
++	#ifndef __ANDROID__
+         p = strchr(v, '=');
+         if (!p) {
+                 /* Fallback */
+@@ -533,6 +533,7 @@
+                 fputs_unlocked(p, f);
+ 
+         fputc_unlocked('\n', f);
++	#endif
+ }
+ 
+ int write_env_file(const char *fname, char **l) {
+diff -uNr systemd/src/basic/quota-util.c systemd.mod/src/basic/quota-util.c
+--- systemd/src/basic/quota-util.c	2021-06-25 10:27:44.147266226 +0000
++++ systemd.mod/src/basic/quota-util.c	2021-06-25 10:40:09.846553714 +0000
+@@ -18,9 +18,12 @@
+         if (r < 0)
+                 return r;
+ 
++	#ifndef __ANDROID__
+         if (quotactl(cmd, devnode, id, addr) < 0)
+                 return -errno;
+ 
++	#endif
++
+         return 0;
+ }
+ 
+diff -uNr systemd/src/basic/sort-util.h systemd.mod/src/basic/sort-util.h
+--- systemd/src/basic/sort-util.h	2021-06-25 10:27:44.148266225 +0000
++++ systemd.mod/src/basic/sort-util.h	2021-06-25 11:21:22.681283903 +0000
+@@ -4,7 +4,7 @@
+ #include <stdlib.h>
+ 
+ #include "macro.h"
+-
++#ifndef __ANDROID__
+ void *xbsearch_r(const void *key, const void *base, size_t nmemb, size_t size,
+                  __compar_d_fn_t compar, void *arg);
+ 
+@@ -27,7 +27,7 @@
+         assert(base);
+         return bsearch(key, base, nmemb, size, compar);
+ }
+-
++#endif
+ #define typesafe_bsearch(k, b, n, func)                                 \
+         ({                                                              \
+                 const typeof(b[0]) *_k = k;                             \
+@@ -39,6 +39,7 @@
+  * Normal qsort requires base to be nonnull. Here were require
+  * that only if nmemb > 0.
+  */
++#ifndef __ANDROID__
+ static inline void _qsort_safe(void *base, size_t nmemb, size_t size, __compar_fn_t compar) {
+         if (nmemb <= 1)
+                 return;
+@@ -54,7 +55,7 @@
+                 int (*_func_)(const typeof(p[0])*, const typeof(p[0])*) = func; \
+                 _qsort_safe((p), (n), sizeof((p)[0]), (__compar_fn_t) _func_); \
+         })
+-
++#ifndef __ANDROID__
+ static inline void qsort_r_safe(void *base, size_t nmemb, size_t size, __compar_d_fn_t compar, void *userdata) {
+         if (nmemb <= 1)
+                 return;
+@@ -62,7 +63,7 @@
+         assert(base);
+         qsort_r(base, nmemb, size, compar, userdata);
+ }
+-
++#endif
+ #define typesafe_qsort_r(p, n, func, userdata)                          \
+         ({                                                              \
+                 int (*_func_)(const typeof(p[0])*, const typeof(p[0])*, typeof(userdata)) = func; \
+@@ -70,3 +71,4 @@
+         })
+ 
+ int cmp_int(const int *a, const int *b);
++#endif
+diff -uNr systemd/src/basic/sparse-endian.h systemd.mod/src/basic/sparse-endian.h
+--- systemd/src/basic/sparse-endian.h	2021-06-25 10:27:44.148266225 +0000
++++ systemd.mod/src/basic/sparse-endian.h	2021-06-25 10:49:09.427052371 +0000
+@@ -34,6 +34,10 @@
+ #define __sd_force
+ #endif
+ 
++#  define __bswap_16(x) bswap_16(x)
++#  define __bswap_32(x) bswap_32(x)
++#  define __bswap_64(x) bswap_64(x)
++
+ typedef uint16_t __sd_bitwise le16_t;
+ typedef uint16_t __sd_bitwise be16_t;
+ typedef uint32_t __sd_bitwise le32_t;
+diff -uNr systemd/src/basic/stdio-util.h systemd.mod/src/basic/stdio-util.h
+--- systemd/src/basic/stdio-util.h	2021-06-25 10:27:44.149266224 +0000
++++ systemd.mod/src/basic/stdio-util.h	2021-06-25 10:33:48.478914708 +0000
+@@ -1,7 +1,8 @@
+ /* SPDX-License-Identifier: LGPL-2.1-or-later */
+ #pragma once
+-
++#ifndef __ANDROID__
+ #include <printf.h>
++#endif
+ #include <stdarg.h>
+ #include <stdio.h>
+ #include <sys/types.h>
+diff -uNr systemd/src/basic/user-util.h systemd.mod/src/basic/user-util.h
+--- systemd/src/basic/user-util.h	2021-06-25 10:27:44.153266220 +0000
++++ systemd.mod/src/basic/user-util.h	2021-06-25 10:44:14.454321081 +0000
+@@ -2,11 +2,20 @@
+ #pragma once
+ 
+ #include <grp.h>
++#ifndef __ANDROID__
++
+ #if ENABLE_GSHADOW
+-#  include <gshadow.h>
++#include <gshadow.h>
++#endif
++
+ #endif
++
+ #include <pwd.h>
++
++#ifndef __ANDROID__
+ #include <shadow.h>
++#endif
++
+ #include <stdbool.h>
+ #include <stdint.h>
+ #include <sys/types.h>
