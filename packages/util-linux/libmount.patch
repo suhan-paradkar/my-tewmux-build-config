@@ -1,0 +1,20 @@
+diff '--color=auto' -uNr util-linux-2.36.2/libmount/src/tab_parse.c util-linux-2.36.2.mod/libmount/src/tab_parse.c
+--- util-linux-2.36.2/libmount/src/tab_parse.c	2021-02-12 17:02:01.745988738 +0530
++++ util-linux-2.36.2.mod/libmount/src/tab_parse.c	2021-06-25 14:47:40.675414664 +0530
+@@ -908,7 +908,7 @@
+ 	if (dd < 0)
+ 	        return -errno;
+ 
+-	n = scandirat(dd, ".", &namelist, mnt_table_parse_dir_filter, versionsort);
++	n = scandirat(dd, ".", &namelist, mnt_table_parse_dir_filter, qsort);
+ 	if (n <= 0) {
+ 	        close(dd);
+ 	        return 0;
+@@ -935,6 +935,7 @@
+ 	free(namelist);
+ 	close(dd);
+ 	return 0;
++
+ }
+ #else
+ static int __mnt_table_parse_dir(struct libmnt_table *tb, const char *dirname)

@@ -1,0 +1,19 @@
+diff '--color=auto' -uNr gtk-3.24.24/gdk/wayland/gdkdisplay-wayland.c gtk-3.24.24.mod/gdk/wayland/gdkdisplay-wayland.c
+--- gtk-3.24.24/gdk/wayland/gdkdisplay-wayland.c	2020-12-06 06:19:26.000000000 +0530
++++ gtk-3.24.24.mod/gdk/wayland/gdkdisplay-wayland.c	2021-06-23 14:43:57.479210063 +0530
+@@ -1282,6 +1282,7 @@
+ 
+       if (force_shm_open)
+         {
++#ifndef __ANDROID__
+ #if defined (__FreeBSD__)
+           ret = shm_open (SHM_ANON, O_CREAT | O_EXCL | O_RDWR | O_CLOEXEC, 0600);
+ #else
+@@ -1296,6 +1297,7 @@
+           else if (errno == EEXIST)
+             continue;
+ #endif
++#endif
+         }
+     }
+   while (ret < 0 && errno == EINTR);
