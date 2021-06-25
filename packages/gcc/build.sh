@@ -1,10 +1,9 @@
 TERMUX_PKG_HOMEPAGE=http://gcc.gnu.org/
 TERMUX_PKG_DESCRIPTION="GNU C compiler"
 TERMUX_PKG_DEPENDS="binutils, libgmp, libmpfr, libmpc, ndk-sysroot, libgcc, libisl"
-TERMUX_PKG_VERSION=5.3.0
-TERMUX_PKG_BUILD_REVISION=2
-TERMUX_PKG_SHA256=b84f5592e9218b73dbae612b5253035a7b34a9a1f7688d2e1bfaaf7267d5c4db
-TERMUX_PKG_SRCURL=ftp://ftp.fu-berlin.de/unix/languages/gcc/releases/gcc-${TERMUX_PKG_VERSION}/gcc-${TERMUX_PKG_VERSION}.tar.bz2
+TERMUX_PKG_VERSION=12
+TERMUX_PKG_GIT_BRANCH=basepoints/gcc-12
+TERMUX_PKG_SRCURL=https://github.com/gcc-mirror/gcc.git
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-languages=c,c++ --with-system-zlib --disable-multilib --disable-lto"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --target=$TERMUX_HOST_PLATFORM"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --with-gmp=$TERMUX_PREFIX --with-mpfr=$TERMUX_PREFIX --with-mpc=$TERMUX_PREFIX"

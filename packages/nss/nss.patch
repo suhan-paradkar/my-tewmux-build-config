@@ -1,0 +1,13 @@
+diff -uNr nss/coreconf/Linux.mk nss.mod/coreconf/Linux.mk
+--- nss/coreconf/Linux.mk	2021-06-22 09:45:10.813843944 +0000
++++ nss.mod/coreconf/Linux.mk	2021-06-22 09:49:02.854250317 +0000
+@@ -131,9 +131,6 @@
+ COMPILER_TAG := _$(CC_NAME)
+ endif
+ 
+-ifeq ($(USE_PTHREADS),1)
+-OS_PTHREAD = -lpthread 
+-endif
+ 
+ OS_CFLAGS		= $(DSO_CFLAGS) $(OS_REL_CFLAGS) $(ARCHFLAG) -pipe -ffunction-sections -fdata-sections -DHAVE_STRERROR
+ ifeq ($(KERNEL),Linux)

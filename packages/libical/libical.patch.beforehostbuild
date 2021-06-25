@@ -1,0 +1,107 @@
+diff -uNr libical-3.0.10/cmake/modules/FindLibXML.cmake libical-3.0.10.mod/cmake/modules/FindLibXML.cmake
+--- libical-3.0.10/cmake/modules/FindLibXML.cmake	2021-04-17 13:12:32.000000000 +0000
++++ libical-3.0.10.mod/cmake/modules/FindLibXML.cmake	2021-06-22 04:05:33.095487287 +0000
+@@ -16,7 +16,7 @@
+   pkg_check_modules(_pc_libxml libxml-2.0${_libxml_version_cmp})
+   if(_pc_libxml_FOUND)
+     set(LIBXML_FOUND TRUE)
+-    set(LIBXML_CFLAGS "${_pc_libxml_CFLAGS}")
++    set(LIBXML_CFLAGS "-I/usr/include/libxml2/libxml/")
+     set(LIBXML_LIBRARIES "${_pc_libxml_LIBRARIES}")
+   endif()
+ endif()
+diff -uNr libical-3.0.10/cmake/modules/FindLibXML.cmake.save libical-3.0.10.mod/cmake/modules/FindLibXML.cmake.save
+--- libical-3.0.10/cmake/modules/FindLibXML.cmake.save	1970-01-01 00:00:00.000000000 +0000
++++ libical-3.0.10.mod/cmake/modules/FindLibXML.cmake.save	2021-06-22 04:03:00.481005162 +0000
+@@ -0,0 +1,27 @@
++# - try to find libxml
++#
++# Once done this will define
++#
++#  LIBXML_FOUND - system has libxml 2.0
++#  LIBXML_CFLAGS
++#  LIBXML_LIBRARIES
++
++find_package(PkgConfig)
++if(PKG_CONFIG_FOUND)
++  set(_libxml_version_cmp)
++  if(DEFINED LibXML_FIND_VERSION)
++    set(_libxml_version_cmp ${LibXML_FIND_VERSION})
++    set(_libxml_version_cmp ">=${_libxml_version_cmp}")
++  endif()
++  pkg_check_modules(_pc_libxml libxml-2.0${_libxml_version_cmp})
++  if(_pc_libxml_FOUND)
++    set(LIBXML_FOUND TRUE)
++    set(LIBXML_CFLAGS "/usr/include/libxml2/libxml/")
++    set(LIBXML_LIBRARIES "${_pc_libxml_LIBRARIES}")
++  endif()
++endif()
++
++mark_as_advanced(
++  LIBXML_CFLAGS
++  LIBXML_LIBRARIES
++)
+diff -uNr libical-3.0.10/CMakeLists.txt libical-3.0.10.mod/CMakeLists.txt
+--- libical-3.0.10/CMakeLists.txt	2021-04-17 13:12:32.000000000 +0000
++++ libical-3.0.10.mod/CMakeLists.txt	2021-06-22 03:51:57.080706727 +0000
+@@ -414,29 +414,14 @@
+ add_feature_info(
+   "Option ICAL_GLIB"
+   ICAL_GLIB
+-  "build libical-glib interface"
+-)
+-if(ICAL_GLIB)
+-  if(NOT PKG_CONFIG_FOUND)
+-    message(FATAL_ERROR
+-      "You requested to build libical-glib, however that option is not supported "
+-      "unless pkg-config can be found. Please install pkg-config and try again. "
+-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
+-  endif()
++  "build libical-glib interface")
+ 
+   find_package(GLib ${MIN_GLIB})
+   set_package_properties(GLib PROPERTIES
+     TYPE OPTIONAL
+     PURPOSE "For the optional libical-glib interface"
+   )
+-  find_package(LibXML ${MIN_LIBXML})
+-  set_package_properties(LibXML PROPERTIES
+-    TYPE OPTIONAL
+-    DESCRIPTION "a library providing XML and HTML support"
+-    URL "http://xmlsoft.org"
+-    PURPOSE "For the optional libical-glib interface"
+-  )
+-  if(GLIB_FOUND AND LIBXML_FOUND)
++  if(GLIB_FOUND)
+     set(HAVE_GLIB TRUE)
+   elseif(GLIB_FOUND)
+     message(FATAL_ERROR
+@@ -444,17 +429,6 @@
+       "is missing or too low a version (libxml ${MIN_LIBXML} or higher is required). "
+       "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
+   elseif(LIBXML_FOUND)
+-    message(FATAL_ERROR
+-      "You requested to build libical-glib, but the necessary development package "
+-      "is missing or too low a version (glib ${MIN_GLIB} or higher is required. "
+-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
+-  else()
+-    message(FATAL_ERROR
+-      "You requested to build libical-glib, but the necessary development packages "
+-      "are missing or too low a version "
+-      "(glib ${MIN_GLIB} and libxml ${MIN_LIBXML} or higher are required). "
+-      "Alternatively, disable the libical-glib build (by passing -DICAL_GLIB=False to cmake).")
+-  endif()
+ endif()
+ 
+ #
+diff -uNr libical-3.0.10/scripts/buildtests.sh libical-3.0.10.mod/scripts/buildtests.sh
+--- libical-3.0.10/scripts/buildtests.sh	2021-04-17 13:12:32.000000000 +0000
++++ libical-3.0.10.mod/scripts/buildtests.sh	2021-06-21 13:39:33.767296345 +0000
+@@ -377,7 +377,6 @@
+        -DLIBICAL_VCAL_NO_EXPORT="" \
+        -DENOENT=1 -DENOMEM=1 -DEINVAL=1 -DSIGALRM=1 \
+        `pkg-config glib-2.0 --cflags` \
+-       `pkg-config libxml-2.0 --cflags` \
+        -I $BDIR \
+        -I $BDIR/src \
+        -I $BDIR/src/libical \
