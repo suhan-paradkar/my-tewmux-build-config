@@ -11,6 +11,9 @@
 #include <fcntl.h>
 //##include <bthread.h>
 #include <sys/types.h>
+
+extern int pipe2(int *, int);
+
 static void reap(pid_t pid)
 {
 	int status;
