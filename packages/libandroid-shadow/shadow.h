@@ -2,21 +2,20 @@
 #define _SHADOW_H        1
 
 #include <paths.h>
-
 #define        __need_FILE
 #include <stdio.h>
 #define __need_size_t
 #include <stddef.h>
 
-#define        SHADOW _PATH_SHADOW
-
+#define _PATH_SHADOW "/data/data/com.termux/files/etc/shadow"
+#define SHADOW _PATH_SHADOW
 
 __BEGIN_DECLS
 
 struct spwd
   {
-    char *sp_namp;                /* Login name.  */
-    char *sp_pwdp;                /* Encrypted password.  */
+    char* sp_namp;                /* Login name.  */
+    char* sp_pwdp;                /* Encrypted password.  */
     long int sp_lstchg;                /* Date of last change.  */
     long int sp_min;                /* Minimum number of days between changes.  */
     long int sp_max;                /* Maximum number of days between changes.  */
@@ -60,9 +59,7 @@ extern int sgetspent_r (__const char *__string, struct spwd *__result_buf,
 extern int fgetspent_r (FILE *__stream, struct spwd *__result_buf,
                         char *__buffer, size_t __buflen,
                         struct spwd **__result);
-#endif        /* misc */
-
-
+#endif
 
 extern int lckpwdf (void);
 

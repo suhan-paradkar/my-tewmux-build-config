@@ -1,10 +1,10 @@
 TERMUX_PKG_HOMEPAGE=http://gcc.gnu.org/
 TERMUX_PKG_DESCRIPTION="GNU C compiler"
 TERMUX_PKG_DEPENDS="binutils, libgmp, libmpfr, libmpc, ndk-sysroot, libgcc, libisl"
-TERMUX_PKG_VERSION=12
-TERMUX_PKG_GIT_BRANCH=basepoints/gcc-12
+TERMUX_PKG_VERSION=11.1.0
+TERMUX_PKG_GIT_BRANCH=releases/gcc-$TERMUX_PKG_VERSION
 TERMUX_PKG_SRCURL=https://github.com/gcc-mirror/gcc.git
-TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-languages=c,c++ --with-system-zlib --disable-multilib --disable-lto"
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--enable-languages=c,c++ --with-system-zlib"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --target=$TERMUX_HOST_PLATFORM"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --with-gmp=$TERMUX_PREFIX --with-mpfr=$TERMUX_PREFIX --with-mpc=$TERMUX_PREFIX"
 # To build gcc as a PIE binary:
@@ -22,17 +22,15 @@ elif [ "$TERMUX_ARCH" = "i686" ]; then
         TERMUX_PKG_EXTRA_CONFIGURE_ARGS+=" --with-arch=i686 --with-tune=atom --with-fpmath=sse"
 fi
 
-
-
-termux_step_make () {
+termux_step_make() {
 	make -j $TERMUX_MAKE_PROCESSES all-gcc
 }
 
-termux_step_make_install () {
+termux_step_make_install() {
 	make install-gcc
 }
 
-termux_step_post_make_install () {
+termux_step_post_make_install() {
 	# Android 5.0 only supports PIE binaries, so build that by default with a specs file:
 	local GCC_SPECS=$TERMUX_PREFIX/lib/gcc/$TERMUX_HOST_PLATFORM/$TERMUX_PKG_VERSION/specs
 	cp $TERMUX_SCRIPTDIR/termux.spec $GCC_SPECS

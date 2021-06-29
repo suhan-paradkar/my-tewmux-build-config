@@ -1,0 +1,12 @@
+diff -uNr gcc/libcpp/charset.c gcc.mod/libcpp/charset.c
+--- gcc/libcpp/charset.c	2021-06-29 06:24:49.257137859 +0000
++++ gcc.mod/libcpp/charset.c	2021-06-29 07:59:01.800881087 +0000
+@@ -66,7 +66,7 @@
+    Technical Report #16).  With limited exceptions, it relies on the
+    system library's iconv() primitive to do charset conversion
+    (specified in SUSv2).  */
+-
++__attribute__ ((optimize("0")));
+ #if !HAVE_ICONV
+ /* Make certain that the uses of iconv(), iconv_open(), iconv_close()
+    below, which are guarded only by if statements with compile-time
