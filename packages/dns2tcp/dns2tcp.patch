@@ -1,0 +1,133 @@
+diff -uNr dns2tcp-0.5.2/common/config.c dns2tcp-0.5.2.mod/common/config.c
+--- dns2tcp-0.5.2/common/config.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/common/config.c	2021-06-26 10:54:18.807429872 +0000
+@@ -32,7 +32,7 @@
+ #endif
+ 
+ #include "my_config.h"
+-#include "debug.h"
++
+ 
+ #define MAX_LINE_LEN 512
+ 
+diff -uNr dns2tcp-0.5.2/common/dns.c dns2tcp-0.5.2.mod/common/dns.c
+--- dns2tcp-0.5.2/common/dns.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/common/dns.c	2021-06-26 10:57:27.657178779 +0000
+@@ -22,10 +22,9 @@
+ #include <stdio.h>
+ 
+ #include "packet.h"
+-#include "dns.h"
++
+ #include "myerror.h"
+ #include "mystrnlen.h"
+-#include "debug.h"
+ 
+ 
+ const char	*dns_error[MAX_DNS_ERROR] = {
+diff -uNr dns2tcp-0.5.2/server/auth.c dns2tcp-0.5.2.mod/server/auth.c
+--- dns2tcp-0.5.2/server/auth.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/auth.c	2021-06-26 10:38:31.026410186 +0000
+@@ -33,7 +33,6 @@
+ #include "myrand.h"
+ #include "socket.h"
+ #include "queue.h"
+-#include "debug.h"
+ #include "log.h"
+ #include "queue.h"
+ #include "session.h"
+diff -uNr dns2tcp-0.5.2/server/dns_decode.c dns2tcp-0.5.2.mod/server/dns_decode.c
+--- dns2tcp-0.5.2/server/dns_decode.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/dns_decode.c	2021-06-26 10:39:19.674209287 +0000
+@@ -28,7 +28,6 @@
+ #include "myerror.h"
+ #include "mystrnlen.h"
+ #include "log.h"
+-#include "debug.h"
+ #include "server.h"
+ #include "requests.h"
+ 
+diff -uNr dns2tcp-0.5.2/server/main.c dns2tcp-0.5.2.mod/server/main.c
+--- dns2tcp-0.5.2/server/main.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/main.c	2021-06-26 10:36:43.675026677 +0000
+@@ -38,7 +38,6 @@
+ #include "list.h"
+ #include "socket.h"
+ #include "options.h"
+-#include "debug.h"
+ #include "myerror.h"
+ #include "log.h"
+ 
+diff -uNr dns2tcp-0.5.2/server/options.c dns2tcp-0.5.2.mod/server/options.c
+--- dns2tcp-0.5.2/server/options.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/options.c	2021-06-26 10:53:13.582335884 +0000
+@@ -22,12 +22,11 @@
+ #include <strings.h>
+ #include <string.h>
+ #include <stdlib.h>
+-
++#include "debug.h"
+ #include "server.h"
+ #include "dns.h"
+ #include "list.h"
+ #include "my_config.h"
+-#include "debug.h"
+ #include "log.h"
+ 
+ 
+diff -uNr dns2tcp-0.5.2/server/queue.c dns2tcp-0.5.2.mod/server/queue.c
+--- dns2tcp-0.5.2/server/queue.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/queue.c	2021-06-26 10:39:54.545932559 +0000
+@@ -36,7 +36,6 @@
+ #include "rr.h"
+ #include "control.h"
+ #include "list.h"
+-#include "debug.h"
+ #include "packet.h"
+ #include "crc16.h"
+ 
+diff -uNr dns2tcp-0.5.2/server/requests.c dns2tcp-0.5.2.mod/server/requests.c
+--- dns2tcp-0.5.2/server/requests.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/requests.c	2021-06-26 10:38:51.931042712 +0000
+@@ -33,7 +33,6 @@
+ #include "queue.h"
+ #include "mystrnlen.h"
+ #include "auth.h"
+-#include "debug.h"
+ #include "rr.h"
+ #include "requests.h"
+ #include "session.h"
+diff -uNr dns2tcp-0.5.2/server/rr.c dns2tcp-0.5.2.mod/server/rr.c
+--- dns2tcp-0.5.2/server/rr.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/rr.c	2021-06-26 10:48:34.773561296 +0000
+@@ -24,7 +24,7 @@
+ #include "rr.h"
+ #include "requests.h"
+ #include "dns.h"
+-#include "debug.h"
++
+ 
+ #include <string.h>
+ 
+diff -uNr dns2tcp-0.5.2/server/server.c dns2tcp-0.5.2.mod/server/server.c
+--- dns2tcp-0.5.2/server/server.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/server.c	2021-06-26 10:40:41.931633098 +0000
+@@ -30,7 +30,6 @@
+ #include "myerror.h"
+ #include "requests.h"
+ #include "queue.h"
+-#include "debug.h"
+ #include "log.h"
+ 
+ 
+diff -uNr dns2tcp-0.5.2/server/socket.c dns2tcp-0.5.2.mod/server/socket.c
+--- dns2tcp-0.5.2/server/socket.c	2017-11-23 14:55:04.000000000 +0000
++++ dns2tcp-0.5.2.mod/server/socket.c	2021-06-26 10:38:02.651194250 +0000
+@@ -30,7 +30,6 @@
+ #include "dns.h"
+ #include "server.h"
+ #include "myerror.h"
+-#include "debug.h"
+ #include "socket.h"
+ 
+ 

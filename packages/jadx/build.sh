@@ -4,7 +4,7 @@ TERMUX_PKG_VERSION=1.2.0
 TERMUX_PKG_SRCURL=https://github.com/skylot/jadx.git
 TERMUX_PKG_BUILD_IN_SRC=true
 _GRADLE_VERSION=7.0.2
-
+TERMUX_PKG_GIT_BRANCH=master
 termux_step_make() {
 	# Download and use a new enough gradle version to avoid the process hanging after running:
 	termux_download \

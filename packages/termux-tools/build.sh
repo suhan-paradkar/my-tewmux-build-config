@@ -2,11 +2,10 @@ TERMUX_PKG_HOMEPAGE=https://termux.com/
 TERMUX_PKG_DESCRIPTION="Basic system tools for Termux"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.127
+TERMUX_PKG_VERSION=0.114
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_ESSENTIAL=true
-TERMUX_PKG_BREAKS="termux-keyring (<< 1.9)"
 TERMUX_PKG_CONFLICTS="procps (<< 3.3.15-2)"
 TERMUX_PKG_SUGGESTS="termux-api"
 TERMUX_PKG_CONFFILES="etc/motd"
@@ -22,7 +21,7 @@ TERMUX_PKG_RECOMMENDS="ed, dos2unix, inetutils, net-tools, patch, unzip"
 termux_step_make_install() {
 	# Remove LD_LIBRARY_PATH from environment to avoid conflicting
 	# with system libraries that system binaries may link against:
-	for tool in df getprop logcat ping ping6 ip pm settings top cmd; do
+	for tool in df getprop logcat mount ping ping6 ip pm settings top umount cmd; do
 		WRAPPER_FILE=$TERMUX_PREFIX/bin/$tool
 		echo '#!/bin/sh' > $WRAPPER_FILE
 		echo 'unset LD_LIBRARY_PATH LD_PRELOAD' >> $WRAPPER_FILE
@@ -60,7 +59,7 @@ termux_step_make_install() {
 
 	mkdir -p $TERMUX_PREFIX/etc/profile.d
 	cat <<- EOF > $TERMUX_PREFIX/etc/profile.d/init-termux-properties.sh
-	if [ ! -f $TERMUX_ANDROID_HOME/.config/termux/termux.properties ] && [ ! -e $TERMUX_ANDROID_HOME/.termux/termux.properties ]; then
+	if [ ! -e $TERMUX_ANDROID_HOME/.termux/termux.properties ]; then
 		mkdir -p $TERMUX_ANDROID_HOME/.termux
 		cp $TERMUX_PREFIX/share/examples/termux/termux.properties $TERMUX_ANDROID_HOME/.termux/
 	fi

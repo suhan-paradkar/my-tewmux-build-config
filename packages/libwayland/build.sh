@@ -7,7 +7,6 @@ TERMUX_PKG_SRCURL=https://wayland.freedesktop.org/releases/wayland-${TERMUX_PKG_
 TERMUX_PKG_SHA256=baccd902300d354581cd5ad3cc49daa4921d55fb416a5883e218750fef166d15
 TERMUX_PKG_DEPENDS="libandroid-support, libffi, libxml2, libexpat"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--disable-documentation --with-host-scanner"
-
 termux_step_pre_configure() {
 	autoreconf -fi
 }
