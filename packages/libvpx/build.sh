@@ -2,9 +2,9 @@ TERMUX_PKG_HOMEPAGE=https://www.webmproject.org
 TERMUX_PKG_DESCRIPTION="VP8 & VP9 Codec SDK"
 TERMUX_PKG_LICENSE="BSD 3-Clause"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=1.9.0
+TERMUX_PKG_VERSION=1.10.0
 TERMUX_PKG_SRCURL=https://github.com/webmproject/libvpx/archive/v${TERMUX_PKG_VERSION}.tar.gz
-TERMUX_PKG_SHA256=d279c10e4b9316bf11a570ba16c3d55791e1ad6faa4404c67422eb631782c80a
+TERMUX_PKG_SHA256=85803ccbdbdd7a3b03d930187cb055f1353596969c1f92ebec2db839fa4f834a
 TERMUX_PKG_DEPENDS="libc++"
 TERMUX_PKG_BREAKS="libvpx-dev"
 TERMUX_PKG_REPLACES="libvpx-dev"
@@ -20,7 +20,6 @@ termux_step_configure() {
 	rm -Rf $TERMUX_PREFIX/include/vpx
 
 	export LD=$CC
-
 
 	if [ $TERMUX_ARCH = "arm" ]; then
 		export AS=$TERMUX_HOST_PLATFORM-as
@@ -53,7 +52,4 @@ termux_step_configure() {
 		--enable-vp8 \
 		--enable-shared \
 		--enable-small
-}
-termux_step_post_configure() {
-	LDFLAGS+="-fPIC"
 }

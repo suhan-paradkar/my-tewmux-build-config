@@ -3,9 +3,9 @@ TERMUX_PKG_DESCRIPTION="Application used in shell scripts which displays text us
 TERMUX_PKG_LICENSE="LGPL-2.1"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_DEPENDS="ncurses"
-TERMUX_PKG_VERSION="1.3-20210117"
+TERMUX_PKG_VERSION="1.3-20210530"
 TERMUX_PKG_SRCURL=https://fossies.org/linux/misc/dialog-${TERMUX_PKG_VERSION}.tgz
-TERMUX_PKG_SHA256=3c1ed08f44bcf6f159f2aa6fde765db94e8997b3eefb49d8b4c86691693c43e1
+TERMUX_PKG_SHA256=1f62df6a48dac087b98452119e4cdfcaa3447b3eb5746b241e5632e1d57bfc4b
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="--with-ncursesw --enable-widec --with-pkg-config"
 
 termux_step_pre_configure() {

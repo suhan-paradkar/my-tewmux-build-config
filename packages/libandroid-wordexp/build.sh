@@ -1,6 +1,6 @@
 TERMUX_PKG_HOMEPAGE=https://man7.org/linux/man-pages/man3/wordexp.3.html
 TERMUX_PKG_DESCRIPTION="Shared library for the wordexp(3) system function"
-TERMUX_PKG_LICENSE="BSD 3-Clause"
+TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=0.1
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
@@ -10,7 +10,6 @@ termux_step_make() {
 	$CC $CFLAGS $CPPFLAGS -I$TERMUX_PKG_BUILDER_DIR -c $TERMUX_PKG_BUILDER_DIR/wordexp.c
 	$CC $LDFLAGS -shared wordexp.o -o libandroid-wordexp.so
 	$AR rcu libandroid-wordexp.a wordexp.o
-	cp -f $TERMUX_PKG_BUILDER_DIR/LICENSE $TERMUX_PKG_SRCDIR/
 }
 
 termux_step_make_install() {
