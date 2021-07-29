@@ -1,77 +1,77 @@
-diff '--color=auto' -uNr weston.mod/.git/ORIG_HEAD weston/.git/ORIG_HEAD
---- weston.mod/.git/ORIG_HEAD	2021-07-29 18:48:58.963401151 +0530
-+++ weston/.git/ORIG_HEAD	1970-01-01 05:30:00.000000000 +0530
-@@ -1 +0,0 @@
--f33ddd08391706802f07c6999e3a64540e8aefb4
-Binary files weston.mod/.git/index and weston/.git/index differ
-diff '--color=auto' -uNr weston.mod/.git/logs/HEAD weston/.git/logs/HEAD
---- weston.mod/.git/logs/HEAD	2021-07-29 18:48:58.963401151 +0530
-+++ weston/.git/logs/HEAD	2021-07-28 17:48:42.355631185 +0530
-@@ -1,2 +1 @@
+diff '--color=auto' -uNr weston/.git/ORIG_HEAD weston.mod/.git/ORIG_HEAD
+--- weston/.git/ORIG_HEAD	1970-01-01 05:30:00.000000000 +0530
++++ weston.mod/.git/ORIG_HEAD	2021-07-29 18:48:58.963401151 +0530
+@@ -0,0 +1 @@
++f33ddd08391706802f07c6999e3a64540e8aefb4
+Binary files weston/.git/index and weston.mod/.git/index differ
+diff '--color=auto' -uNr weston/.git/logs/HEAD weston.mod/.git/logs/HEAD
+--- weston/.git/logs/HEAD	2021-07-28 17:48:42.355631185 +0530
++++ weston.mod/.git/logs/HEAD	2021-07-29 18:48:58.963401151 +0530
+@@ -1 +1,2 @@
  0000000000000000000000000000000000000000 f33ddd08391706802f07c6999e3a64540e8aefb4 suhan_paradkar <12suhangp34@gmail.com> 1627474722 +0530	clone: from https://github.com/wayland-project/weston
--f33ddd08391706802f07c6999e3a64540e8aefb4 f33ddd08391706802f07c6999e3a64540e8aefb4 suhan_paradkar <12suhangp34@gmail.com> 1627564738 +0530	reset: moving to HEAD
-diff '--color=auto' -uNr weston.mod/clients/desktop-shell.c weston/clients/desktop-shell.c
---- weston.mod/clients/desktop-shell.c	2021-07-29 18:48:58.947401151 +0530
-+++ weston/clients/desktop-shell.c	2021-07-29 08:21:37.481865634 +0530
++f33ddd08391706802f07c6999e3a64540e8aefb4 f33ddd08391706802f07c6999e3a64540e8aefb4 suhan_paradkar <12suhangp34@gmail.com> 1627564738 +0530	reset: moving to HEAD
+diff '--color=auto' -uNr weston/clients/desktop-shell.c weston.mod/clients/desktop-shell.c
+--- weston/clients/desktop-shell.c	2021-07-29 08:21:37.481865634 +0530
++++ weston.mod/clients/desktop-shell.c	2021-07-29 18:48:58.947401151 +0530
 @@ -1159,7 +1159,7 @@
  	weston_config_section_get_string(s, "background-type",
  					 &type, "tile");
  	if (type == NULL) {
--		fprintf(stderr, "%s: out of memory\n", program_invocation_short_name);
-+		printf(stderr);
+-		printf(stderr);
++		fprintf(stderr, "%s: out of memory\n", program_invocation_short_name);
  		exit(EXIT_FAILURE);
  	}
  
-diff '--color=auto' -uNr weston.mod/clients/touch-calibrator.c weston/clients/touch-calibrator.c
---- weston.mod/clients/touch-calibrator.c	2021-07-29 18:48:58.951401151 +0530
-+++ weston/clients/touch-calibrator.c	2021-07-29 08:20:27.721865630 +0530
+diff '--color=auto' -uNr weston/clients/touch-calibrator.c weston.mod/clients/touch-calibrator.c
+--- weston/clients/touch-calibrator.c	2021-07-29 08:20:27.721865630 +0530
++++ weston.mod/clients/touch-calibrator.c	2021-07-29 18:48:58.951401151 +0530
 @@ -869,7 +869,7 @@
  	va_list argp;
  
  	va_start(argp, fmt);
--	fprintf(stderr, "%s error: ", program_invocation_short_name);
-+	printf(stderr);
+-	printf(stderr);
++	fprintf(stderr, "%s error: ", program_invocation_short_name);
  	vfprintf(stderr, fmt, argp);
  	va_end(argp);
  }
-@@ -880,8 +880,7 @@
+@@ -880,7 +880,8 @@
  	fprintf(stderr, "Compute a touchscreen calibration matrix for "
  		"a Wayland compositor by\n"
  		"having the user touch points on the screen.\n\n");
--	fprintf(stderr, "Usage: %s [options...] name\n\n",
--		program_invocation_short_name);
-+	printf(stderr);
+-	printf(stderr);
++	fprintf(stderr, "Usage: %s [options...] name\n\n",
++		program_invocation_short_name);
  	fprintf(stderr,
  		"Where 'name' can be a touch device sys path or a head name.\n"
  		"If 'name' is not given, all devices available for "
-diff '--color=auto' -uNr weston.mod/libweston/input.c weston/libweston/input.c
---- weston.mod/libweston/input.c	2021-07-29 18:48:58.955401151 +0530
-+++ weston/libweston/input.c	2021-07-29 08:19:07.545865625 +0530
+diff '--color=auto' -uNr weston/libweston/input.c weston.mod/libweston/input.c
+--- weston/libweston/input.c	2021-07-29 08:19:07.545865625 +0530
++++ weston.mod/libweston/input.c	2021-07-29 18:48:58.955401151 +0530
 @@ -34,7 +34,7 @@
  #include <sys/mman.h>
  #include <assert.h>
  #include <unistd.h>
--#include <values.h>
-+#include <limits.h>
+-#include <limits.h>
++#include <values.h>
  #include <fcntl.h>
  #include <limits.h>
  #include <errno.h>
-diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
---- weston.mod/meson_options.txt	2021-07-29 18:48:58.955401151 +0530
-+++ weston/meson_options.txt	2021-07-29 08:12:42.173865602 +0530
+diff '--color=auto' -uNr weston/meson_options.txt weston.mod/meson_options.txt
+--- weston/meson_options.txt	2021-07-29 08:12:42.173865602 +0530
++++ weston.mod/meson_options.txt	2021-07-29 18:48:58.955401151 +0530
 @@ -5,13 +5,13 @@
  option(
  	'backend-drm',
  	type: 'boolean',
--	value: true,
-+	value: false,
+-	value: false,
++	value: true,
  	description: 'Weston backend: DRM/KMS'
  )
  option(
  	'backend-drm-screencast-vaapi',
  	type: 'boolean',
--	value: true,
-+	value: false,
+-	value: false,
++	value: true,
  	description: 'DRM/KMS backend support for VA-API screencasting'
  )
  option(
@@ -79,24 +79,24 @@ diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
  	'backend-default',
  	type: 'combo',
  	choices: [ 'auto', 'drm', 'wayland', 'x11', 'fbdev', 'headless' ],
--	value: 'drm',
-+	value: 'wayland',
+-	value: 'wayland',
++	value: 'drm',
  	description: 'Default backend when no parent display server detected'
  )
  
  option(
  	'renderer-gl',
  	type: 'boolean',
--	value: true,
-+	value: false,
+-	value: false,
++	value: true,
  	description: 'Weston renderer: EGL / OpenGL ES 2.x'
  )
  
  option(
  	'weston-launch',
  	type: 'boolean',
--	value: true,
-+	value: false,
+-	value: false,
++	value: true,
  	description: 'Weston launcher for systems without logind'
  )
  
@@ -104,8 +104,8 @@ diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
  option(
  	'systemd',
  	type: 'boolean',
--	value: true,
-+	value: false,
+-	value: false,
++	value: true,
  	description: 'systemd service plugin: state notify, watchdog, socket activation'
  )
  
@@ -113,8 +113,8 @@ diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
  option(
  	'deprecated-wl-shell',
  	type: 'boolean',
--	value: false,
-+	value: true,
+-	value: true,
++	value: false,
  	description: 'Enable the deprecated wl_shell protocol'
  )
  
@@ -122,8 +122,8 @@ diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
  option(
  	'launcher-logind',
  	type: 'boolean',
--	value: true,
-+	value: false,
+-	value: false,
++	value: true,
  	description: 'Compositor: support systemd-logind D-Bus protocol'
  )
  
@@ -131,48 +131,48 @@ diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
  option(
  	'simple-clients',
  	type: 'array',
--	choices: [ 'all', 'damage', 'im', 'egl', 'shm', 'touch', 'dmabuf-v4l', 'dmabuf-egl' ],
--	value: [ 'all' ],
-+	choices: [ 'all', 'damage', 'im', 'egl', 'shm', 'touch', 'dmabuf-v4l' ],
-+	value: [ 'damage' ],
+-	choices: [ 'all', 'damage', 'im', 'egl', 'shm', 'touch', 'dmabuf-v4l' ],
+-	value: [ 'damage' ],
++	choices: [ 'all', 'damage', 'im', 'egl', 'shm', 'touch', 'dmabuf-v4l', 'dmabuf-egl' ],
++	value: [ 'all' ],
  	description: 'Sample clients: simple test programs'
  )
  
-diff '--color=auto' -uNr weston.mod/protocol/meson.build weston/protocol/meson.build
---- weston.mod/protocol/meson.build	2021-07-29 18:48:58.955401151 +0530
-+++ weston/protocol/meson.build	2021-07-28 19:50:49.070055335 +0530
+diff '--color=auto' -uNr weston/protocol/meson.build weston.mod/protocol/meson.build
+--- weston/protocol/meson.build	2021-07-28 19:50:49.070055335 +0530
++++ weston.mod/protocol/meson.build	2021-07-29 18:48:58.955401151 +0530
 @@ -1,4 +1,4 @@
--dep_scanner = dependency('wayland-scanner', native: true)
-+dep_scanner = dependency('wayland-scanner', native: false)
+-dep_scanner = dependency('wayland-scanner', native: false)
++dep_scanner = dependency('wayland-scanner', native: true)
  prog_scanner = find_program(dep_scanner.get_pkgconfig_variable('wayland_scanner'))
  
  dep_wp = dependency('wayland-protocols', version: '>= 1.18')
-diff '--color=auto' -uNr weston.mod/shared/xalloc.c weston/shared/xalloc.c
---- weston.mod/shared/xalloc.c	2021-07-29 18:48:58.959401151 +0530
-+++ weston/shared/xalloc.c	2021-07-29 08:15:53.197865613 +0530
+diff '--color=auto' -uNr weston/shared/xalloc.c weston.mod/shared/xalloc.c
+--- weston/shared/xalloc.c	2021-07-29 08:15:53.197865613 +0530
++++ weston.mod/shared/xalloc.c	2021-07-29 18:48:58.959401151 +0530
 @@ -36,7 +36,7 @@
  fail_on_null(void *p, size_t size, char *file, int32_t line)
  {
  	if (p == NULL) {
--		fprintf(stderr, "[%s] ", program_invocation_short_name);
-+		printf(stderr);
+-		printf(stderr);
++		fprintf(stderr, "[%s] ", program_invocation_short_name);
  		if (file)
  			fprintf(stderr, "%s:%d: ", file, line);
  		fprintf(stderr, "out of memory");
-diff '--color=auto' -uNr weston.mod/tests/weston-test.c weston/tests/weston-test.c
---- weston.mod/tests/weston-test.c	2021-07-29 18:48:58.959401151 +0530
-+++ weston/tests/weston-test.c	2021-07-29 08:25:11.701865646 +0530
-@@ -618,11 +618,13 @@
+diff '--color=auto' -uNr weston/tests/weston-test.c weston.mod/tests/weston-test.c
+--- weston/tests/weston-test.c	2021-07-29 08:25:11.701865646 +0530
++++ weston.mod/tests/weston-test.c	2021-07-29 18:48:58.959401151 +0530
+@@ -618,13 +618,11 @@
  
  	test = wl_container_of(listener, test, destroy_listener);
  
-+#ifndef __ANDROID__
+-#ifndef __ANDROID__
  	if (test->client_source) {
  		weston_log_scope_printf(test->log, "Cancelling client thread...\n");
  		pthread_cancel(test->client_thread);
  		client_thread_join(test);
  	}
-+#endif
+-#endif
  
  	if (test->is_seat_initialized)
  		test_seat_release(test);
