@@ -1,4 +1,5 @@
-TERMUX_PKG_DESCRIPTION="Gradle"
-TERMUX_PKG_LICENSE="BSD 3-Clause"
-TERMUX_PKG_VERSION=0.14.3
-TERMUX_PKG_SRCURL=https://gitlab.freedesktop.org/spice/spice-protocol.git
+TERMUX_PKG_DESCRIPTION="Weston compositor for wayland"
+TERMUX_PKG_LICENSE="MIT"
+TERMUX_PKG_VERSION=9.0.0
+TERMUX_PKG_SRCURL=https://github.com/wayland-project/weston.git
+TERMUX_PKG_GIT_BRANCH=$TERMUX_PKG_VERSION

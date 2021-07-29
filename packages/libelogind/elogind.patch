@@ -1,0 +1,103 @@
+diff -uNr elogind-246.10/src/basic/fileio.c elogind-246.10.mod/src/basic/fileio.c
+--- elogind-246.10/src/basic/fileio.c	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/basic/fileio.c	2021-07-29 13:07:49.770890114 +0000
+@@ -389,7 +389,7 @@
+                 return -errno;
+ 
+         /* Start size for files in /proc which usually report a file size of 0. */
+-        size = LINE_MAX / 2;
++        size = 166 / 2;
+ 
+         /* Limit the number of attempts to read the number of bytes returned by fstat(). */
+         n_retries = 3;
+@@ -488,7 +488,7 @@
+         assert(ret_contents);
+         assert(!FLAGS_SET(flags, READ_FULL_FILE_UNBASE64 | READ_FULL_FILE_UNHEX));
+ 
+-        n_next = LINE_MAX; /* Start size */
++        n_next = 166; /* Start size */
+ 
+         fd = fileno(f);
+         if (fd >= 0) { /* If the FILE* object is backed by an fd (as opposed to memory or such, see fmemopen()), let's
+diff -uNr elogind-246.10/src/basic/fs-util.c elogind-246.10.mod/src/basic/fs-util.c
+--- elogind-246.10/src/basic/fs-util.c	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/basic/fs-util.c	2021-07-29 13:10:40.571558068 +0000
+@@ -1522,10 +1522,6 @@
+         fd = openat(atfd, path, O_CLOEXEC|O_RDONLY|O_NONBLOCK);
+         if (fd < 0)
+                 return -errno;
+-
+-        if (syncfs(fd) < 0)
+-                return -errno;
+-
+         return 0;
+ }
+ 
+diff -uNr elogind-246.10/src/basic/io-util.c elogind-246.10.mod/src/basic/io-util.c
+--- elogind-246.10/src/basic/io-util.c	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/basic/io-util.c	2021-07-29 13:12:04.051260589 +0000
+@@ -19,7 +19,7 @@
+          * was set to non-blocking too. */
+ 
+         for (;;) {
+-                char buf[LINE_MAX];
++                char buf[166];
+                 ssize_t l;
+                 int r;
+ 
+diff -uNr elogind-246.10/src/basic/log.c elogind-246.10.mod/src/basic/log.c
+--- elogind-246.10/src/basic/log.c	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/basic/log.c	2021-07-29 13:13:39.451777421 +0000
+@@ -14,7 +14,7 @@
+ #include <unistd.h>
+ 
+ #include "sd-messages.h"
+-
++#define LINE_MAX 160
+ #include "alloc-util.h"
+ #include "errno-util.h"
+ #include "fd-util.h"
+diff -uNr elogind-246.10/src/basic/sparse-endian.h elogind-246.10.mod/src/basic/sparse-endian.h
+--- elogind-246.10/src/basic/sparse-endian.h	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/basic/sparse-endian.h	2021-07-29 13:00:59.764884173 +0000
+@@ -34,6 +34,10 @@
+ #define __sd_force
+ #endif
+ 
++#  define __bswap_16(x) bswap_16(x)
++#  define __bswap_32(x) bswap_32(x)
++#  define __bswap_64(x) bswap_64(x)
++
+ typedef uint16_t __sd_bitwise le16_t;
+ typedef uint16_t __sd_bitwise be16_t;
+ typedef uint32_t __sd_bitwise le32_t;
+diff -uNr elogind-246.10/src/shared/musl_missing.h elogind-246.10.mod/src/shared/musl_missing.h
+--- elogind-246.10/src/shared/musl_missing.h	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/shared/musl_missing.h	2021-07-29 13:04:54.469913841 +0000
+@@ -38,8 +38,7 @@
+  * + test if the process has a nonempty permitted capability set
+  */
+ #if ! HAVE_SECURE_GETENV && ! HAVE___SECURE_GETENV
+-#  define secure_getenv(name) \
+-        (issetugid() ? NULL : getenv(name))
++#  define secure_getenv(name) getenv(name)
+ #  undef HAVE_SECURE_GETENV
+ #  define HAVE_SECURE_GETENV 1
+ #endif // HAVE_[__]SECURE_GETENV
+@@ -74,6 +73,7 @@
+ #endif
+ 
+ /* Make musl utmp/wtmp stubs visible if needed. */
++#ifndef __ANDROID__
+ #if ENABLE_UTMP
+ # include <paths.h>
+ # include <utmp.h>
+@@ -85,7 +85,7 @@
+ #   define _PATH_WTMPX _PATH_WTMP
+ # endif
+ #endif // ENABLE_UTMP
+-
++#endif
+ /*
+  * Systemd makes use of undeclared glibc-specific __register_atfork to avoid
+  * a depednency on libpthread, __register_atfork is roughly equivalent to

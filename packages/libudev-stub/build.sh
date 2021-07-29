@@ -1,4 +1,5 @@
-TERMUX_PKG_DESCRIPTION="Gradle"
-TERMUX_PKG_LICENSE="BSD 3-Clause"
-TERMUX_PKG_VERSION=0.14.3
-TERMUX_PKG_SRCURL=https://gitlab.freedesktop.org/spice/spice-protocol.git
+TERMUX_PKG_DESCRIPTION="Udev device manager stub"
+TERMUX_PKG_LICENSE="LGPL-2.1"
+TERMUX_PKG_VERSION=228
+TERMUX_PKG_SRCURL=https://github.com/suhan-paradkar/libudev-stub.git
+TERMUX_PKG_GIT_BRANCH=v1.0.4
