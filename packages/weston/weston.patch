@@ -1,8 +1,19 @@
-diff --git a/clients/desktop-shell.c b/clients/desktop-shell.c
-index f3821f6..cdd2b54 100644
---- a/clients/desktop-shell.c
-+++ b/clients/desktop-shell.c
-@@ -1159,7 +1159,7 @@ background_create(struct desktop *desktop, struct output *output)
+diff '--color=auto' -uNr weston.mod/.git/ORIG_HEAD weston/.git/ORIG_HEAD
+--- weston.mod/.git/ORIG_HEAD	2021-07-29 18:48:58.963401151 +0530
++++ weston/.git/ORIG_HEAD	1970-01-01 05:30:00.000000000 +0530
+@@ -1 +0,0 @@
+-f33ddd08391706802f07c6999e3a64540e8aefb4
+Binary files weston.mod/.git/index and weston/.git/index differ
+diff '--color=auto' -uNr weston.mod/.git/logs/HEAD weston/.git/logs/HEAD
+--- weston.mod/.git/logs/HEAD	2021-07-29 18:48:58.963401151 +0530
++++ weston/.git/logs/HEAD	2021-07-28 17:48:42.355631185 +0530
+@@ -1,2 +1 @@
+ 0000000000000000000000000000000000000000 f33ddd08391706802f07c6999e3a64540e8aefb4 suhan_paradkar <12suhangp34@gmail.com> 1627474722 +0530	clone: from https://github.com/wayland-project/weston
+-f33ddd08391706802f07c6999e3a64540e8aefb4 f33ddd08391706802f07c6999e3a64540e8aefb4 suhan_paradkar <12suhangp34@gmail.com> 1627564738 +0530	reset: moving to HEAD
+diff '--color=auto' -uNr weston.mod/clients/desktop-shell.c weston/clients/desktop-shell.c
+--- weston.mod/clients/desktop-shell.c	2021-07-29 18:48:58.947401151 +0530
++++ weston/clients/desktop-shell.c	2021-07-29 08:21:37.481865634 +0530
+@@ -1159,7 +1159,7 @@
  	weston_config_section_get_string(s, "background-type",
  					 &type, "tile");
  	if (type == NULL) {
@@ -11,11 +22,10 @@ index f3821f6..cdd2b54 100644
  		exit(EXIT_FAILURE);
  	}
  
-diff --git a/clients/touch-calibrator.c b/clients/touch-calibrator.c
-index 66208d1..0f5727e 100644
---- a/clients/touch-calibrator.c
-+++ b/clients/touch-calibrator.c
-@@ -869,7 +869,7 @@ pr_err(const char *fmt, ...)
+diff '--color=auto' -uNr weston.mod/clients/touch-calibrator.c weston/clients/touch-calibrator.c
+--- weston.mod/clients/touch-calibrator.c	2021-07-29 18:48:58.951401151 +0530
++++ weston/clients/touch-calibrator.c	2021-07-29 08:20:27.721865630 +0530
+@@ -869,7 +869,7 @@
  	va_list argp;
  
  	va_start(argp, fmt);
@@ -24,7 +34,7 @@ index 66208d1..0f5727e 100644
  	vfprintf(stderr, fmt, argp);
  	va_end(argp);
  }
-@@ -880,8 +880,7 @@ help(void)
+@@ -880,8 +880,7 @@
  	fprintf(stderr, "Compute a touchscreen calibration matrix for "
  		"a Wayland compositor by\n"
  		"having the user touch points on the screen.\n\n");
@@ -34,10 +44,9 @@ index 66208d1..0f5727e 100644
  	fprintf(stderr,
  		"Where 'name' can be a touch device sys path or a head name.\n"
  		"If 'name' is not given, all devices available for "
-diff --git a/libweston/input.c b/libweston/input.c
-index 8f6abd5..dcd91c8 100644
---- a/libweston/input.c
-+++ b/libweston/input.c
+diff '--color=auto' -uNr weston.mod/libweston/input.c weston/libweston/input.c
+--- weston.mod/libweston/input.c	2021-07-29 18:48:58.955401151 +0530
++++ weston/libweston/input.c	2021-07-29 08:19:07.545865625 +0530
 @@ -34,7 +34,7 @@
  #include <sys/mman.h>
  #include <assert.h>
@@ -47,10 +56,9 @@ index 8f6abd5..dcd91c8 100644
  #include <fcntl.h>
  #include <limits.h>
  #include <errno.h>
-diff --git a/meson_options.txt b/meson_options.txt
-index d404aef..a538b7b 100644
---- a/meson_options.txt
-+++ b/meson_options.txt
+diff '--color=auto' -uNr weston.mod/meson_options.txt weston/meson_options.txt
+--- weston.mod/meson_options.txt	2021-07-29 18:48:58.955401151 +0530
++++ weston/meson_options.txt	2021-07-29 08:12:42.173865602 +0530
 @@ -5,13 +5,13 @@
  option(
  	'backend-drm',
@@ -67,7 +75,7 @@ index d404aef..a538b7b 100644
  	description: 'DRM/KMS backend support for VA-API screencasting'
  )
  option(
-@@ -54,21 +54,21 @@ option(
+@@ -54,21 +54,21 @@
  	'backend-default',
  	type: 'combo',
  	choices: [ 'auto', 'drm', 'wayland', 'x11', 'fbdev', 'headless' ],
@@ -92,7 +100,7 @@ index d404aef..a538b7b 100644
  	description: 'Weston launcher for systems without logind'
  )
  
-@@ -88,7 +88,7 @@ option(
+@@ -88,7 +88,7 @@
  option(
  	'systemd',
  	type: 'boolean',
@@ -101,7 +109,7 @@ index d404aef..a538b7b 100644
  	description: 'systemd service plugin: state notify, watchdog, socket activation'
  )
  
-@@ -141,7 +141,7 @@ option(
+@@ -141,7 +141,7 @@
  option(
  	'deprecated-wl-shell',
  	type: 'boolean',
@@ -110,7 +118,7 @@ index d404aef..a538b7b 100644
  	description: 'Enable the deprecated wl_shell protocol'
  )
  
-@@ -161,7 +161,7 @@ option(
+@@ -161,7 +161,7 @@
  option(
  	'launcher-logind',
  	type: 'boolean',
@@ -119,7 +127,7 @@ index d404aef..a538b7b 100644
  	description: 'Compositor: support systemd-logind D-Bus protocol'
  )
  
-@@ -200,8 +200,8 @@ option(
+@@ -200,8 +200,8 @@
  option(
  	'simple-clients',
  	type: 'array',
@@ -130,21 +138,19 @@ index d404aef..a538b7b 100644
  	description: 'Sample clients: simple test programs'
  )
  
-diff --git a/protocol/meson.build b/protocol/meson.build
-index 25cea5a..45c1762 100644
---- a/protocol/meson.build
-+++ b/protocol/meson.build
+diff '--color=auto' -uNr weston.mod/protocol/meson.build weston/protocol/meson.build
+--- weston.mod/protocol/meson.build	2021-07-29 18:48:58.955401151 +0530
++++ weston/protocol/meson.build	2021-07-28 19:50:49.070055335 +0530
 @@ -1,4 +1,4 @@
 -dep_scanner = dependency('wayland-scanner', native: true)
 +dep_scanner = dependency('wayland-scanner', native: false)
  prog_scanner = find_program(dep_scanner.get_pkgconfig_variable('wayland_scanner'))
  
  dep_wp = dependency('wayland-protocols', version: '>= 1.18')
-diff --git a/shared/xalloc.c b/shared/xalloc.c
-index 1cc5c12..1cad424 100644
---- a/shared/xalloc.c
-+++ b/shared/xalloc.c
-@@ -36,7 +36,7 @@ void *
+diff '--color=auto' -uNr weston.mod/shared/xalloc.c weston/shared/xalloc.c
+--- weston.mod/shared/xalloc.c	2021-07-29 18:48:58.959401151 +0530
++++ weston/shared/xalloc.c	2021-07-29 08:15:53.197865613 +0530
+@@ -36,7 +36,7 @@
  fail_on_null(void *p, size_t size, char *file, int32_t line)
  {
  	if (p == NULL) {
@@ -153,11 +159,10 @@ index 1cc5c12..1cad424 100644
  		if (file)
  			fprintf(stderr, "%s:%d: ", file, line);
  		fprintf(stderr, "out of memory");
-diff --git a/tests/weston-test.c b/tests/weston-test.c
-index 772e5d0..8fc075b 100644
---- a/tests/weston-test.c
-+++ b/tests/weston-test.c
-@@ -618,11 +618,13 @@ handle_compositor_destroy(struct wl_listener *listener,
+diff '--color=auto' -uNr weston.mod/tests/weston-test.c weston/tests/weston-test.c
+--- weston.mod/tests/weston-test.c	2021-07-29 18:48:58.959401151 +0530
++++ weston/tests/weston-test.c	2021-07-29 08:25:11.701865646 +0530
+@@ -618,11 +618,13 @@
  
  	test = wl_container_of(listener, test, destroy_listener);
  
