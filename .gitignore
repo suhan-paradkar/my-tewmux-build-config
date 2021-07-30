@@ -18,3 +18,4 @@ scripts/.vagrant/
 
 # Predownloaded packages sources.
 /packages/*/cache
+/disabled-packages

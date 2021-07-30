@@ -101,3 +101,33 @@ diff -uNr elogind-246.10/src/shared/musl_missing.h elogind-246.10.mod/src/shared
  /*
   * Systemd makes use of undeclared glibc-specific __register_atfork to avoid
   * a depednency on libpthread, __register_atfork is roughly equivalent to
+diff -uNr elogind-246.10/src/sleep/sleep.c elogind-246.10.mod/src/sleep/sleep.c
+--- elogind-246.10/src/sleep/sleep.c	2021-03-02 08:29:23.000000000 +0000
++++ elogind-246.10.mod/src/sleep/sleep.c	2021-07-30 01:51:04.562199419 +0000
+@@ -566,7 +566,7 @@
+         if (r < 0)
+                 return log_oom();
+ 
+-        printf("%s COMMAND\n\n"
++        printf("COMMAND\n\n"
+                "Suspend the system, hibernate the system, or both.\n\n"
+                "  -h --help              Show this help and exit\n"
+                "  --version              Print version string and exit\n"
+@@ -577,7 +577,6 @@
+                "  suspend-then-hibernate Initially suspend and then hibernate\n"
+                "                         the system after a fixed period of time\n"
+                "\nSee the %s for details.\n"
+-               , program_invocation_short_name
+                , link
+         );
+ 
+@@ -617,8 +616,7 @@
+ 
+         if (argc - optind != 1)
+                 return log_error_errno(SYNTHETIC_ERRNO(EINVAL),
+-                                       "Usage: %s COMMAND",
+-                                       program_invocation_short_name);
++                                       "Usage: COMMAND");
+ 
+         arg_verb = strdup(argv[optind]);
+         if (!arg_verb)
