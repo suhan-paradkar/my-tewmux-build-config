@@ -14,12 +14,11 @@ TERMUX_PKG_CONFLICTS="libgtk3"
 TERMUX_PKG_REPLACES="libgtk3"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
-G-IR-SCANNER=/usr/bin/g-ir-scanner
 --enable-xinerama
 --enable-xfixes
 --enable-xcomposite
 --enable-xdamage
---enable-introspection
+--disablee-introspection
 "
 
 TERMUX_PKG_RM_AFTER_INSTALL="share/glib-2.0/schemas/gschemas.compiled"
