@@ -47,7 +47,7 @@ diff -uNr elogind-246.10/src/basic/io-util.c elogind-246.10.mod/src/basic/io-uti
  
 diff -uNr elogind-246.10/src/basic/log.c elogind-246.10.mod/src/basic/log.c
 --- elogind-246.10/src/basic/log.c	2021-03-02 08:29:23.000000000 +0000
-+++ elogind-246.10.mod/src/basic/log.c	2021-07-29 13:13:39.451777421 +0000
++++ elogind-246.10.mod/src/basic/log.c	2021-07-31 13:37:45.163465198 +0000
 @@ -14,7 +14,7 @@
  #include <unistd.h>
  
@@ -57,6 +57,34 @@ diff -uNr elogind-246.10/src/basic/log.c elogind-246.10.mod/src/basic/log.c
  #include "alloc-util.h"
  #include "errno-util.h"
  #include "fd-util.h"
+@@ -492,7 +492,7 @@
+ 
+         iovec[0] = IOVEC_MAKE_STRING(header_priority);
+         iovec[1] = IOVEC_MAKE_STRING(header_time);
+-        iovec[2] = IOVEC_MAKE_STRING(program_invocation_short_name);
++        iovec[2] = IOVEC_MAKE_STRING("people");
+         iovec[3] = IOVEC_MAKE_STRING(header_pid);
+         iovec[4] = IOVEC_MAKE_STRING(buffer);
+ 
+@@ -548,7 +548,7 @@
+         xsprintf(header_pid, "["PID_FMT"]: ", getpid_cached());
+ 
+         iovec[0] = IOVEC_MAKE_STRING(header_priority);
+-        iovec[1] = IOVEC_MAKE_STRING(program_invocation_short_name);
++        iovec[1] = IOVEC_MAKE_STRING("people2");
+         iovec[2] = IOVEC_MAKE_STRING(header_pid);
+         iovec[3] = IOVEC_MAKE_STRING(buffer);
+         iovec[4] = IOVEC_MAKE_STRING("\n");
+@@ -601,8 +601,7 @@
+                      isempty(object) ? "" : "\n",
+                      isempty(extra) ? "" : extra_field,
+                      isempty(extra) ? "" : extra,
+-                     isempty(extra) ? "" : "\n",
+-                     program_invocation_short_name);
++                     isempty(extra) ? "" : "\n");
+         assert_raw((size_t) r < size);
+ 
+         return 0;
 diff -uNr elogind-246.10/src/basic/sparse-endian.h elogind-246.10.mod/src/basic/sparse-endian.h
 --- elogind-246.10/src/basic/sparse-endian.h	2021-03-02 08:29:23.000000000 +0000
 +++ elogind-246.10.mod/src/basic/sparse-endian.h	2021-07-29 13:00:59.764884173 +0000

@@ -1,30 +1,22 @@
-TERMUX_PKG_DESCRIPTION="Jadx"
+TERMUX_PKG_HOMEPAGE=https://github.com/skylot/jadx
+TERMUX_PKG_DESCRIPTION="Dex to Java decompiler"
 TERMUX_PKG_LICENSE="Apache-2.0"
+TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=1.2.0
-TERMUX_PKG_SRCURL=https://github.com/skylot/jadx.git
-TERMUX_PKG_BUILD_IN_SRC=true
-_GRADLE_VERSION=7.0.2
-TERMUX_PKG_GIT_BRANCH=master
-termux_step_make() {
-	# Download and use a new enough gradle version to avoid the process hanging after running:
-	termux_download \
-		https://services.gradle.org/distributions/gradle-$_GRADLE_VERSION-bin.zip \
-		$TERMUX_PKG_CACHEDIR/gradle-$_GRADLE_VERSION-bin.zip \
-		0e46229820205440b48a5501122002842b82886e76af35f0f3a069243dca4b3c
-	mkdir $TERMUX_PKG_TMPDIR/gradle
-	unzip -q $TERMUX_PKG_CACHEDIR/gradle-$_GRADLE_VERSION-bin.zip -d $TERMUX_PKG_TMPDIR/gradle
-
-	# Avoid spawning the gradle daemon due to org.gradle.jvmargs
-	# being set (https://github.com/gradle/gradle/issues/1434):
-	rm gradle.properties
-
-	export ANDROID_HOME
-	export GRADLE_OPTS="-Dorg.gradle.daemon=false -Xmx1536m"
-
-	$TERMUX_PKG_TMPDIR/gradle/gradle-$_GRADLE_VERSION/bin/gradle \
-	::dist
-}
+TERMUX_PKG_SRCURL=https://github.com/skylot/jadx/releases/download/v$TERMUX_PKG_VERSION/jadx-$TERMUX_PKG_VERSION.zip
+TERMUX_PKG_SHA256=e6ae92be16edae2098b1a9951533feba4278bb18f00fbab54eb23a427b98d425
+TERMUX_PKG_DEPENDS="openjdk-17"
+TERMUX_PKG_PLATFORM_INDEPENDENT=true
 
 termux_step_make_install() {
-	cp $TERMUX_PKG_SRCDIR/jadx-gui $TERMUX_PREFIX
+	rm -f ./bin/*.bat
+	rm -rf $TERMUX_PREFIX/opt/jadx
+	mkdir -p $TERMUX_PREFIX/opt/jadx
+	cp -r ./* $TERMUX_PREFIX/opt/jadx/
+	for i in $TERMUX_PREFIX/opt/jadx/bin/*; do
+		if [ ! -f "$i" ]; then
+			continue
+		fi
+		ln -sfr $i $TERMUX_PREFIX/bin/$(basename $i)
+	done
 }

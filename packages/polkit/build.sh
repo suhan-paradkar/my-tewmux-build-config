@@ -4,7 +4,7 @@ TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_VERSION=0.118
 TERMUX_PKG_SRCURL=https://gitlab.freedesktop.org/polkit/polkit.git
 TERMUX_PKG_GIT_BRANCH=$TERMUX_PKG_VERSION
-TERMUX_PKG_DEPENDS="duktape, libelogind, libudev-stub"
+TERMUX_PKG_DEPENDS="duktape, libudev-stub, glib, libexpat"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS+="--with-duktape --enable-libsystemd-login=no --enable-libelogind=no"
 
 termux_step_pre_configure() {
