@@ -3,22 +3,22 @@ TERMUX_PKG_DESCRIPTION="GObject-based multi-platform GUI toolkit"
 TERMUX_PKG_LICENSE="LGPL-2.0"
 TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
 TERMUX_PKG_VERSION=3.24.24
-TERMUX_PKG_REVISION=3
+TERMUX_PKG_REVISION=4
 TERMUX_PKG_SRCURL=https://gitlab.gnome.org/GNOME/gtk/-/archive/$TERMUX_PKG_VERSION/gtk-$TERMUX_PKG_VERSION.tar.gz
 TERMUX_PKG_SHA256=55de8ae3233c9bc97d3d00fad9c53d18192624baaffa210679afec209333ab12
 TERMUX_PKG_BUILD_IN_SRC=true
 
-TERMUX_PKG_DEPENDS="adwaita-icon-theme, atk, coreutils, desktop-file-utils, gdk-pixbuf, glib, glib-bin, gtk-update-icon-cache, libcairo, libepoxy, libxcomposite, libxcursor, libxdamage, libxfixes, libxi, libxinerama, libxrandr, pango, shared-mime-info, ttf-dejavu, at-spi2-atk, gobject-introspection"
+TERMUX_PKG_DEPENDS="adwaita-icon-theme, atk, coreutils, desktop-file-utils, gdk-pixbuf, glib, glib-bin, gtk-update-icon-cache, libcairo, libepoxy, libxcomposite, libxcursor, libxdamage, libxfixes, libxi, libxinerama, libxrandr, pango, shared-mime-info, ttf-dejavu"
 TERMUX_PKG_BUILD_DEPENDS="xorgproto"
 TERMUX_PKG_CONFLICTS="libgtk3"
 TERMUX_PKG_REPLACES="libgtk3"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
+--disable-introspection
 --enable-xinerama
 --enable-xfixes
 --enable-xcomposite
 --enable-xdamage
---disablee-introspection
 "
 
 TERMUX_PKG_RM_AFTER_INSTALL="share/glib-2.0/schemas/gschemas.compiled"
