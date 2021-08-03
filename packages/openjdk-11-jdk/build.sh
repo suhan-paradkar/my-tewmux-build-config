@@ -113,4 +113,5 @@ termux_step_make_install() {
 		ln -sfr $TERMUX_PREFIX/lib/$l \
 			$TERMUX_PREFIX/opt/openjdk/lib/$l
 	done
+
 }

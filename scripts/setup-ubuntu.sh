@@ -2,6 +2,7 @@
 set -e -u
 
 PACKAGES=""
+
 PACKAGES+=" python3-dev"
 # For en_US.UTF-8 locale.
 PACKAGES+=" locales"
