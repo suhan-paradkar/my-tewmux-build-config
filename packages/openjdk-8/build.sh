@@ -62,9 +62,7 @@ termux_step_configure() {
 		--with-extra-cxxflags="$CXXFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
 		--with-extra-ldflags="${jdk_ldflags} -landroid-shmem -landroid-spawn" \
 		--disable-precompiled-headers \
-		--disable-warnings-as-errors \
 		--enable-option-checking=fatal \
-		--enable-headless-only=yes \
 		--with-toolchain-type=gcc \
 		--with-jvm-variants=server \
 		--with-devkit="$TERMUX_STANDALONE_TOOLCHAIN" \
@@ -73,7 +71,6 @@ termux_step_configure() {
 		--with-fontconfig-include="$TERMUX_PREFIX/include" \
 		--with-freetype-include="$TERMUX_PREFIX/include/freetype2" \
 		--with-freetype-lib="$TERMUX_PREFIX/lib" \
-		--with-libpng=system \
 		--with-zlib=system \
 		--x-includes="$TERMUX_PREFIX/include/X11" \
 		--x-libraries="$TERMUX_PREFIX/lib"
