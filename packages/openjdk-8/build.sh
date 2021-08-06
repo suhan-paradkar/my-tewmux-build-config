@@ -6,10 +6,9 @@ TERMUX_PKG_VERSION=8.0
 TERMUX_PKG_SRCURL=https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u.git
 TERMUX_PKG_GIT_BRANCH=aarch64-shenandoah-jdk8u272-b10
 TERMUX_PKG_DEPENDS="freetype, libandroid-shmem, libandroid-spawn, libiconv, zlib"
-TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender, gtk3"
+TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender, libxtst, libxrender, libxt, alsa-lib"
 TERMUX_PKG_SUGGESTS="cups, fontconfig, libx11, libxrender"
 TERMUX_PKG_BUILD_IN_SRC=true
-TERMUX_PKG_HAS_DEBUG=false
 
 termux_step_pre_configure() {
 	unset JAVA_HOME
@@ -58,8 +57,8 @@ termux_step_configure() {
 	local jdk_ldflags="-L${TERMUX_PREFIX}/lib -Wl,-rpath=$TERMUX_PREFIX/opt/openjdk/lib -Wl,--enable-new-dtags"
 	bash ./configure \
 		--openjdk-target=$TERMUX_HOST_PLATFORM \
-		--with-extra-cflags="$CFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
-		--with-extra-cxxflags="$CXXFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
+		--with-extra-cflags="-fstack-protector-strong -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
+		--with-extra-cxxflags="-fstack-protector-strong -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
 		--with-extra-ldflags="${jdk_ldflags} -landroid-shmem -landroid-spawn" \
 		--disable-precompiled-headers \
 		--enable-option-checking=fatal \
@@ -77,7 +76,6 @@ termux_step_configure() {
 }
 
 termux_step_make() {
-	cd build/linux-${TERMUX_ARCH/i686/x86}-server-release
 	make JOBS=1 images
 
 	# Delete created library stubs.
