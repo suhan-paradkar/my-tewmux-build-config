@@ -6,7 +6,7 @@ TERMUX_PKG_VERSION=8.0
 TERMUX_PKG_SRCURL=https://github.com/PojavLauncherTeam/openjdk-multiarch-jdk8u.git
 TERMUX_PKG_GIT_BRANCH=aarch64-shenandoah-jdk8u272-b10
 TERMUX_PKG_DEPENDS="freetype, libandroid-shmem, libandroid-spawn, libiconv, zlib"
-TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender"
+TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender, gtk3"
 TERMUX_PKG_SUGGESTS="cups, fontconfig, libx11, libxrender"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HAS_DEBUG=false
@@ -62,9 +62,7 @@ termux_step_configure() {
 		--with-extra-cxxflags="$CXXFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
 		--with-extra-ldflags="${jdk_ldflags} -landroid-shmem -landroid-spawn" \
 		--disable-precompiled-headers \
-		--disable-warnings-as-errors \
 		--enable-option-checking=fatal \
-		--enable-headless-only=yes \
 		--with-toolchain-type=gcc \
 		--with-jvm-variants=server \
 		--with-devkit="$TERMUX_STANDALONE_TOOLCHAIN" \
@@ -73,7 +71,6 @@ termux_step_configure() {
 		--with-fontconfig-include="$TERMUX_PREFIX/include" \
 		--with-freetype-include="$TERMUX_PREFIX/include/freetype2" \
 		--with-freetype-lib="$TERMUX_PREFIX/lib" \
-		--with-libpng=system \
 		--with-zlib=system \
 		--x-includes="$TERMUX_PREFIX/include/X11" \
 		--x-libraries="$TERMUX_PREFIX/lib"
