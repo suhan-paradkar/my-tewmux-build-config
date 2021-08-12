@@ -8,6 +8,7 @@ PACKAGES+=" python3-dev"
 PACKAGES+=" locales"
 PACKAGES+=" python3-pip"
 # To provide /usr/bin/python as symlink to /usr/bin/python3
+
 PACKAGES+=" python-is-python3"
 PACKAGES+=" libwayland-dev"
 PACKAGES+=" sassc"
