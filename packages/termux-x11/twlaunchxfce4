@@ -1,0 +1,6 @@
+#!/data/data/com.termux/usr/bin/bash
+
+export XDG_RUNTIME_DIR=/data/data/com.termux/usr/tmp/
+Xwayland -ac :1
+xfce4-session --display=:1 &
+

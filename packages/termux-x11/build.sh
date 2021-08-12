@@ -10,4 +10,8 @@ termux_step_make_install() {
 	$CC $CFLAGS $CPPFLAGS -DTERMUX_PREFIX=\"$TERMUX_PREFIX\" \
 		$TERMUX_PKG_BUILDER_DIR/termux-x11.c -o $TERMUX_PREFIX/bin/termux-x11 \
 		$LDFLAGS -lwayland-client
+
+	install -Dm600 $TERMUX_PKG_BUILDER_DIR/twlaunchxfce4 $TERMUX_PREFIX/bin
+	install -Dm600 $TERMUX_PKG_BUILDER_DIR/twlaunchlxqt $TERMUX_PREFIX/bin
+
 }
