@@ -14,6 +14,7 @@ PACKAGES+=" libwayland-dev"
 PACKAGES+=" sassc"
 PACKAGES+=" wget"
 PACKAGES+=" openjdk-11-jdk"
+PACKAGES+=" wayland-scanner++"
 
 # Used by build-package.sh and CI/CD scripts.
 PACKAGES+=" curl"
