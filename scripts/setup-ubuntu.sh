@@ -8,11 +8,13 @@ PACKAGES+=" python3-dev"
 PACKAGES+=" locales"
 PACKAGES+=" python3-pip"
 # To provide /usr/bin/python as symlink to /usr/bin/python3
+
 PACKAGES+=" python-is-python3"
 PACKAGES+=" libwayland-dev"
 PACKAGES+=" sassc"
 PACKAGES+=" wget"
 PACKAGES+=" openjdk-11-jdk"
+PACKAGES+=" wayland-scanner++"
 
 # Used by build-package.sh and CI/CD scripts.
 PACKAGES+=" curl"
