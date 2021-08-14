@@ -1,3 +1,4 @@
+TERMUX_PKG_HOMEPAGE=https://musl.libc.org/
 TERMUX_PKG_DESCRIPTION="musl is an implementation of the C standard library built on top of the Linux system call API"
 TERMUX_PKG_LICENSE="MIT"
 TERMUX_PKG_VERSION=1.2.2
