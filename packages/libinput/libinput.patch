@@ -1,0 +1,57 @@
+diff -uNr libinput/src/util-prop-parsers.c libinput.mod/src/util-prop-parsers.c
+--- libinput/src/util-prop-parsers.c	2021-08-18 02:34:56.139322988 +0000
++++ libinput.mod/src/util-prop-parsers.c	2021-08-18 02:38:29.213391141 +0000
+@@ -491,7 +491,7 @@
+ 	while (current && *current != '\0' && bit <= ABS_MASK_FLAT) {
+ 		if (*current != ':') {
+ 			int v;
+-			next = index(current, ':');
++			next = strchr(current, ':');
+ 			if (next)
+ 				*next = '\0';
+ 
+diff -uNr libinput/src/util-strings.c libinput.mod/src/util-strings.c
+--- libinput/src/util-strings.c	2021-08-18 02:34:56.140323063 +0000
++++ libinput.mod/src/util-strings.c	2021-08-18 02:37:00.394692718 +0000
+@@ -230,7 +230,7 @@
+ 	if (base == NULL)
+ 		return strdup("");
+ 
+-	suffix = rindex(base, '.');
++	suffix = strrchr(base, '.');
+ 	if (suffix == NULL)
+ 		return strdup(base);
+ 	else
+diff -uNr libinput/test/litest.c libinput.mod/test/litest.c
+--- libinput/test/litest.c	2021-08-18 02:34:56.147323591 +0000
++++ libinput.mod/test/litest.c	2021-08-18 02:43:25.374727616 +0000
+@@ -1105,7 +1105,7 @@
+ 			 * double-click selection in the terminal a bit
+ 			 * easier. */
+ 			snprintf(tname, sizeof(tname), "%s)", tr_tcname(trs[i]));
+-			if ((c = index(c, ':')))
++			if ((c = strchr(c, ':')))
+ 				*c = '(';
+ 
+ 			dprintf(error_fd,
+@@ -1366,7 +1366,7 @@
+ 
+ 		suffixlen = file->path +
+ 				strlen(file->path) -
+-				rindex(file->path, '.');
++				strrchr(file->path, '.');
+ 		out = mkstemps(file->path, suffixlen);
+ 	} else {
+ 		out = open(file->path, O_CREAT|O_WRONLY, 0644);
+@@ -1481,10 +1481,7 @@
+ 	struct dirent **namelist;
+ 	int ndev;
+ 
+-	ndev = scandir(LIBINPUT_QUIRKS_SRCDIR,
+-		       &namelist,
+-		       is_quirks_file,
+-		       versionsort);
++	ndev = 0;
+ 	litest_assert_int_ge(ndev, 0);
+ 
+ 	for (int idx = 0; idx < ndev; idx++) {
