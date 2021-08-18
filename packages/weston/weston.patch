@@ -1,3 +1,48 @@
+diff -uNr weston/clients/desktop-shell.c weston.mod/clients/desktop-shell.c
+--- weston/clients/desktop-shell.c	2021-08-18 03:07:40.275442455 +0000
++++ weston.mod/clients/desktop-shell.c	2021-08-18 08:31:04.122906340 +0000
+@@ -1152,7 +1152,7 @@
+ 	weston_config_section_get_string(s, "background-type",
+ 					 &type, "tile");
+ 	if (type == NULL) {
+-		fprintf(stderr, "%s: out of memory\n", program_invocation_short_name);
++		fprintf(stderr, "weston: out of memory\n");
+ 		exit(EXIT_FAILURE);
+ 	}
+ 
+diff -uNr weston/clients/touch-calibrator.c weston.mod/clients/touch-calibrator.c
+--- weston/clients/touch-calibrator.c	2021-08-18 03:07:40.281442907 +0000
++++ weston.mod/clients/touch-calibrator.c	2021-08-18 08:48:21.128432679 +0000
+@@ -869,7 +869,7 @@
+ 	va_list argp;
+ 
+ 	va_start(argp, fmt);
+-	fprintf(stderr, "%s error: ", program_invocation_short_name);
++	fprintf(stderr, "touch_calibration error: ");
+ 	vfprintf(stderr, fmt, argp);
+ 	va_end(argp);
+ }
+@@ -880,8 +880,7 @@
+ 	fprintf(stderr, "Compute a touchscreen calibration matrix for "
+ 		"a Wayland compositor by\n"
+ 		"having the user touch points on the screen.\n\n");
+-	fprintf(stderr, "Usage: %s [options...] name\n\n",
+-		program_invocation_short_name);
++	fprintf(stderr, "Usage: touch_calibrator [options...] name\n\n");
+ 	fprintf(stderr,
+ 		"Where 'name' can be a touch device sys path or a head name.\n"
+ 		"If 'name' is not given, all devices available for "
+diff -uNr weston/libweston/input.c weston.mod/libweston/input.c
+--- weston/libweston/input.c	2021-08-18 03:07:40.313445321 +0000
++++ weston.mod/libweston/input.c	2021-08-18 08:23:23.843153269 +0000
+@@ -34,7 +34,6 @@
+ #include <sys/mman.h>
+ #include <assert.h>
+ #include <unistd.h>
+-#include <values.h>
+ #include <fcntl.h>
+ #include <limits.h>
+ #include <errno.h>
 diff -uNr weston/libweston/meson.build weston.mod/libweston/meson.build
 --- weston/libweston/meson.build	2021-08-18 03:07:40.315445471 +0000
 +++ weston.mod/libweston/meson.build	2021-08-18 03:09:21.052042177 +0000
@@ -19,9 +64,20 @@ diff -uNr weston/libweston/meson.build weston.mod/libweston/meson.build
  		include_directories: common_inc,
  		install: true
  	)
+diff -uNr weston/libweston/weston-launch.c weston.mod/libweston/weston-launch.c
+--- weston/libweston/weston-launch.c	2021-08-18 03:07:40.319445773 +0000
++++ weston.mod/libweston/weston-launch.c	2021-08-18 08:25:44.002825455 +0000
+@@ -51,7 +51,6 @@
+ 
+ #include <pwd.h>
+ #include <grp.h>
+-#include <security/pam_appl.h>
+ 
+ #ifdef HAVE_SYSTEMD_LOGIN
+ #include <systemd/sd-login.h>
 diff -uNr weston/meson_options.txt weston.mod/meson_options.txt
 --- weston/meson_options.txt	2021-08-18 03:07:40.320445849 +0000
-+++ weston.mod/meson_options.txt	2021-08-18 03:22:44.017612127 +0000
++++ weston.mod/meson_options.txt	2021-08-18 08:29:26.322160905 +0000
 @@ -5,7 +5,7 @@
  option(
  	'backend-drm',
@@ -40,6 +96,15 @@ diff -uNr weston/meson_options.txt weston.mod/meson_options.txt
  	description: 'Default backend when no parent display server detected'
  )
  
+@@ -68,7 +68,7 @@
+ option(
+ 	'weston-launch',
+ 	type: 'boolean',
+-	value: true,
++	value: false,
+ 	description: 'Weston launcher for systems without logind'
+ )
+ 
 @@ -187,7 +187,7 @@
  	'simple-clients',
  	type: 'array',
@@ -48,4 +113,29 @@ diff -uNr weston/meson_options.txt weston.mod/meson_options.txt
 +	value: [ 'damage' ],
  	description: 'Sample clients: simple test programs'
  )
+ 
+diff -uNr weston/shared/xalloc.c weston.mod/shared/xalloc.c
+--- weston/shared/xalloc.c	2021-08-18 03:07:40.324446150 +0000
++++ weston.mod/shared/xalloc.c	2021-08-18 08:19:59.002004882 +0000
+@@ -36,7 +36,7 @@
+ fail_on_null(void *p, size_t size, char *file, int32_t line)
+ {
+ 	if (p == NULL) {
+-		fprintf(stderr, "[%s] ", program_invocation_short_name);
++		fprintf(stderr, "Error");
+ 		if (file)
+ 			fprintf(stderr, "%s:%d: ", file, line);
+ 		fprintf(stderr, "out of memory");
+diff -uNr weston/tests/weston-test.c weston.mod/tests/weston-test.c
+--- weston/tests/weston-test.c	2021-08-18 03:07:40.336447055 +0000
++++ weston.mod/tests/weston-test.c	2021-08-18 08:50:25.378003204 +0000
+@@ -790,7 +790,9 @@
+ 
+ 	if (test->client_source) {
+ 		weston_log_scope_printf(test->log, "Cancelling client thread...\n");
++#ifndef __ANDROID__
+ 		pthread_cancel(test->client_thread);
++#endif
+ 		client_thread_join(test);
+ 	}
  
