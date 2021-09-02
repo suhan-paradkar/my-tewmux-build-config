@@ -14,10 +14,5 @@ termux_step_make_install() {
 	rm -rf $TERMUX_PREFIX/opt/intellijidea
 	mkdir -p $TERMUX_PREFIX/opt/intellijidea
 	cp -r ./* $TERMUX_PREFIX/opt/intellijidea/
-	for i in $TERMUX_PREFIX/opt/intellijidea/bin/*; do
-		if [ ! -f "$i" ]; then
-			continue
-		fi
-		ln -sfr $i $TERMUX_PREFIX/bin/$(basename $i)
-	done
+	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/idea.sh $TERMUX_PREFIX/bin/idea.sh
 }
