@@ -2,20 +2,17 @@ TERMUX_PKG_HOMEPAGE=https://termux.com/
 TERMUX_PKG_DESCRIPTION="Basic system tools for Termux"
 TERMUX_PKG_LICENSE="GPL-3.0"
 TERMUX_PKG_MAINTAINER="@termux"
-TERMUX_PKG_VERSION=0.134
-TERMUX_PKG_REVISION=1
+TERMUX_PKG_VERSION=0.119
+TERMUX_PKG_REVISION=2
 TERMUX_PKG_SKIP_SRC_EXTRACT=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 TERMUX_PKG_ESSENTIAL=true
-TERMUX_PKG_BREAKS="termux-keyring (<< 1.9)"
-TERMUX_PKG_CONFLICTS="procps (<< 3.3.15-2)"
 TERMUX_PKG_SUGGESTS="termux-api"
-TERMUX_PKG_CONFFILES="etc/motd"
 
 # Some of these packages are not dependencies and used only to ensure
 # that core packages are installed after upgrading (we removed busybox
 # from essentials).
-TERMUX_PKG_DEPENDS="bzip2, coreutils, curl, dash, diffutils, findutils, gawk, grep, gzip, less, procps, psmisc, sed, tar, termux-am, termux-exec, util-linux, xz-utils, dialog"
+TERMUX_PKG_DEPENDS="bzip2, coreutils, curl, dash, diffutils, findutils, gawk, grep, gzip, less, procps, psmisc, sed, tar, termux-exec, util-linux, xz-utils, dialog"
 
 # Optional packages that are distributed as part of bootstrap archives.
 TERMUX_PKG_RECOMMENDS="ed, dos2unix, inetutils, net-tools, patch, unzip"
@@ -34,9 +31,7 @@ termux_step_make_install() {
 		chmod +x $WRAPPER_FILE
 	done
 
-	for script in chsh dalvikvm login pkg su termux-fix-shebang termux-info \
-		termux-open termux-open-url termux-reload-settings termux-reset \
-		termux-setup-storage termux-wake-lock termux-wake-unlock termux-change-repo; do
+	for script in dalvikvm pkg; do
 			install -Dm700 $TERMUX_PKG_BUILDER_DIR/$script $TERMUX_PREFIX/bin/$script
 			sed -i -e "s%\@TERMUX_APP_PACKAGE\@%${TERMUX_APP_PACKAGE}%g" \
 				-e "s%\@TERMUX_BASE_DIR\@%${TERMUX_BASE_DIR}%g" \
@@ -46,9 +41,6 @@ termux_step_make_install() {
 				-e "s%\@PACKAGE_VERSION\@%${TERMUX_PKG_VERSION}%g" \
 				$TERMUX_PREFIX/bin/$script
 	done
-
-	install -Dm600 $TERMUX_PKG_BUILDER_DIR/motd $TERMUX_PREFIX/etc/motd
-	ln -sfr $TERMUX_PREFIX/bin/termux-open $TERMUX_PREFIX/bin/xdg-open
 
 	mkdir -p $TERMUX_PREFIX/share/man/man1
 	sed -e "s|@TERMUX_PREFIX@|${TERMUX_PREFIX}|g" -e "s|@TERMUX_HOME@|${TERMUX_ANDROID_HOME}|g" \

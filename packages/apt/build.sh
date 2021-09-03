@@ -3,6 +3,7 @@ TERMUX_PKG_DESCRIPTION="Front-end for the dpkg package manager"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=2.3.8
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://deb.debian.org/debian/pool/main/a/apt/apt_${TERMUX_PKG_VERSION}.tar.xz
 TERMUX_PKG_SHA256=485af1430c75e3158b715e4424dbf96d1b5641dc4dccc50f571b2c779a837f2c
 # apt-key requires utilities from coreutils, findutils, gpgv, grep, sed.
@@ -70,8 +71,7 @@ termux_step_pre_configure() {
 }
 
 termux_step_post_make_install() {
-	printf "# The main termux repository:\ndeb https://packages.termux.org/apt/termux-main/ stable main\n" > $TERMUX_PREFIX/etc/apt/sources.list
-	cp $TERMUX_PKG_BUILDER_DIR/trusted.gpg $TERMUX_PREFIX/etc/apt/
+	printf "# PWN-Hunter repository\n# Please DO NOT add any other repos here.\n\ndeb [trusted=yes] https://gitlab.com/pwn-hunter/apt-repository/-/raw/rolling/ rolling main\n" > $TERMUX_PREFIX/etc/apt/sources.list
 
 	# apt-transport-tor
 	ln -sfr $TERMUX_PREFIX/lib/apt/methods/http $TERMUX_PREFIX/lib/apt/methods/tor
