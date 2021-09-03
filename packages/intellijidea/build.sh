@@ -15,4 +15,7 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/opt/intellijidea
 	cp -r ./* $TERMUX_PREFIX/opt/intellijidea/
 	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/idea.sh $TERMUX_PREFIX/bin/idea.sh
+	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/inspect.sh $TERMUX_PREFIX/bin/inspect.sh
+	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/format.sh $TERMUX_PREFIX/bin/format.sh
+	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/ltedit.sh $TERMUX_PREFIX/bin/ltedit.sh
 }

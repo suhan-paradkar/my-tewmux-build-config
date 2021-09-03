@@ -1,0 +1,18 @@
+diff -uNr idea-IC-212.4746.92/bin/idea.sh idea-IC-212.4746.92.mod/bin/idea.sh
+--- idea-IC-212.4746.92/bin/idea.sh	2021-07-27 07:13:42.000000000 +0000
++++ idea-IC-212.4746.92.mod/bin/idea.sh	2021-09-03 04:27:42.511039197 +0000
+@@ -151,6 +151,14 @@
+ # shellcheck disable=SC2086
+ "$JAVA_BIN" \
+   -classpath "$CLASSPATH" \
++  --add-opens java.desktop/sun.awt=ALL-UNNAMED \
++  --add-opens java.desktop/java.awt.event=ALL-UNNAMED \
++  --add-opens java.desktop/javax.swing.text.html=ALL-UNNAMED \
++  --add-opens java.desktop/javax.swing=ALL-UNNAMED \
++  --add-opens java.desktop/javax.swing.plaf.basic=ALL-UNNAMED \
++  --add-opens java.desktop/java.awt=ALL-UNNAMED \
++  --add-opens java.desktop/sun.swing=ALL-UNNAMED \
++  --add-opens java.base/java.lang=ALL-UNNAMED \
+   ${VM_OPTIONS} \
+   "-XX:ErrorFile=$HOME/java_error_in_idea_%p.log" \
+   "-XX:HeapDumpPath=$HOME/java_error_in_idea_.hprof" \
