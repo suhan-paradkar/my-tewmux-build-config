@@ -1,6 +1,6 @@
-#!/data/data/hilled.pwnterm/files/usr/bin/sh
+#!/data/data/com.termux/files/usr/bin/sh
 
-PREFIX="/data/data/hilled.pwnterm/files/usr"
+PREFIX="/data/data/com.termux/files/usr"
 
 if [ `uname -o` = 'Android' ]; then
     echo "Patching Qt installation configuration files ..."

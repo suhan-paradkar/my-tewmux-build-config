@@ -26,7 +26,6 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-glx=xlib
 --with-platforms=x11
 --without-dri-drivers
---without-gallium-drivers
 ac_cv_header_xlocale_h=no
 "
 

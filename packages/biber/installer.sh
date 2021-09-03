@@ -22,7 +22,6 @@ trap 'while read -r; do true; done; stty sane;' EXIT
 echo "[*] Installing cpanm..."
 
 cpan install App::cpanminus
-export PATH="$PATH:$HOME/perl5/bin"
 
 echo "[*] Downloading and patching troublesome dependencies..."
 

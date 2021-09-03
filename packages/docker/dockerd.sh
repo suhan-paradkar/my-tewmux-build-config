@@ -4,10 +4,6 @@ export PATH="${PATH}:/system/xbin:/system/bin"
 opts='rw,nosuid,nodev,noexec,relatime'
 cgroups='blkio cpu cpuacct cpuset devices freezer memory pids schedtune'
 
-mkdir -p /sys/fs/cgroup/devices
-mount -t cgroup -o devices cgroup /sys/fs/cgroup/devices
-mount -t tmpfs -o mode=755 tmpfs /sys/fs/cgroup
-
 # try to mount cgroup root dir and exit in case of failure
 if ! mountpoint -q /sys/fs/cgroup 2>/dev/null; then
   mkdir -p /sys/fs/cgroup

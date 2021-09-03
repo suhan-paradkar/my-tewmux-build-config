@@ -2,7 +2,6 @@ TERMUX_PKG_HOMEPAGE=https://xorg.freedesktop.org/wiki/
 TERMUX_PKG_DESCRIPTION="Xorg server"
 TERMUX_PKG_VERSION=1.20.11
 TERMUX_PKG_LICENSE="GPL-2.0"
-TERMUX_PKG_MAINTAINER="@hilledkinged"
 TERMUX_PKG_SRCURL=https://xorg.freedesktop.org/releases/individual/xserver/xorg-server-${TERMUX_PKG_VERSION}.tar.bz2
 TERMUX_PKG_SHA256=914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c49
 
@@ -11,7 +10,7 @@ TERMUX_PKG_SHA256=914c796e3ffabe1af48071d40ccc85e92117c97a9082ed1df29e4d64e3c34c
 
 TERMUX_PKG_BLACKLISTED_ARCHES="i686"
 
-TERMUX_PKG_DEPENDS="libandroid-shmem, libdrm, libpciaccess, libpixman, libx11, libxau, libxfont2, libxinerama, libxkbfile, libxshmfence, mesa, openssl, xkeyboard-config, xorg-xkbcomp, libwayland, libwayland-protocols, libepoxy"
+TERMUX_PKG_DEPENDS="libandroid-shmem, libdrm, libpciaccess, libpixman, libx11, libxau, libxfont2, libxinerama, libxkbfile, libxshmfence, mesa, openssl, xkeyboard-config, xorg-xkbcomp"
 
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --enable-composite
@@ -48,7 +47,7 @@ TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-dmx
 --disable-xvfb
 --disable-xnest
---enable-xwayland
+--disable-xwayland
 --disable-xwin
 --disable-kdrive
 --enable-xephyr
@@ -81,11 +80,6 @@ termux_step_pre_configure() {
 
 termux_step_post_make_install () {
 	rm -f "${TERMUX_PREFIX}/usr/share/X11/xkb/compiled"
-	
-	# Manually install xwayland binary
-	mkdir -p $TERMUX_PKG_MASSAGEDIR/$TERMUX_PREFIX/bin
-	
-	cp -rf $TERMUX_PKG_BUILDDIR/hw/xwayland/Xwayland $TERMUX_PREFIX/bin
 }
 
 ## The following is required for package 'tigervnc'.
