@@ -10,7 +10,7 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_PLATFORM_INDEPENDENT=true
 
 termux_step_make_install() {
-	rm -f ./bin/*.bat
+	rm -f ./bin/*.cmd
 	rm -rf $TERMUX_PREFIX/opt/kotlin
 	mkdir -p $TERMUX_PREFIX/opt/kotlin
 	cp -r ./* $TERMUX_PREFIX/opt/kotlin/
