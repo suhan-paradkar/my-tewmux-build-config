@@ -1,6 +1,6 @@
 TERMUX_PKG_HOMEPAGE=https://dl.winehq.org/
 TERMUX_PKG_DESCRIPTION="Run Windows applications on Linux, BSD, Solaris and Mac OS X."
-TERMUX_PKG_LICENSE="GPL-2.1"
+TERMUX_PKG_LICENSE="LGPL-2.1"
 TERMUX_PKG_VERSION=6.11
 TERMUX_PKG_MAINTAINER="@suhan-paradkar"
 TERMUX_PKG_SRCURL=https://github.com/PWN-Term/wine/archive/refs/heads/pwn.tar.gz
