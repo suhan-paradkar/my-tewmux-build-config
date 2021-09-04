@@ -7,6 +7,7 @@ PACKAGES+=" python3-dev"
 # For en_US.UTF-8 locale.
 PACKAGES+=" locales"
 PACKAGES+=" python3-pip"
+
 # To provide /usr/bin/python as symlink to /usr/bin/python3
 
 PACKAGES+=" python-is-python3"
