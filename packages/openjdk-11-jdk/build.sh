@@ -1,18 +1,23 @@
-TERMUX_PKG_HOMEPAGE=https://github.com/PojavLauncherTeam/mobile
-TERMUX_PKG_DESCRIPTION="Java development kit and runtime"
+TERMUX_PKG_HOMEPAGE=http://openjdk.java.net
+TERMUX_PKG_DESCRIPTION="OpenJDK 11 Java Runtime Environment (prerelease)"
 TERMUX_PKG_LICENSE="GPL-2.0"
 TERMUX_PKG_MAINTAINER="@termux"
 TERMUX_PKG_VERSION=11.0.12
-TERMUX_PKG_GIT_BRANCH=jdk-$TERMUX_PKG_VERSION+7
-TERMUX_PKG_SRCURL=https://github.com/openjdk/jdk11u.git
-TERMUX_PKG_DEPENDS="freetype, libandroid-shmem, libandroid-spawn, libiconv, zlib"
-TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender, libxtst, libxt"
+TERMUX_PKG_REVISION=1
+TERMUX_PKG_SRCURL=https://github.com/PWN-Term/openjdk-jdk11u/archive/refs/heads/master.tar.gz
+TERMUX_PKG_SHA256=3ea43ab463504a6c41a539cb3dc9388f175ab949ea2b978cc8abfd5033b459c3
+TERMUX_PKG_DEPENDS="freetype, libandroid-shmem, libandroid-spawn, libiconv, zlib, xorgproto, libx11, libxcursor, libxext, cups, fontconfig, libpng, libxrender, libxtst, libxrandr, libxt, libxi"
+TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender"
 TERMUX_PKG_SUGGESTS="cups, fontconfig, libx11, libxrender"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HAS_DEBUG=false
+TERMUX_PKG_NO_ELF_CLEANER=false
+
+export COMPILER_WARNINGS_FATAL=false
 
 termux_step_pre_configure() {
 	unset JAVA_HOME
+
 	# Provide fake gcc.
 	mkdir -p $TERMUX_PKG_SRCDIR/wrappers-bin
 	cat <<- EOF > $TERMUX_PKG_SRCDIR/wrappers-bin/android-wrapped-clang
@@ -55,15 +60,15 @@ termux_step_pre_configure() {
 
 termux_step_configure() {
 	local jdk_ldflags="-L${TERMUX_PREFIX}/lib -Wl,-rpath=$TERMUX_PREFIX/opt/openjdk/lib -Wl,--enable-new-dtags"
+	local COMPILER_WARNINGS_FATAL=false
 	bash ./configure \
 		--openjdk-target=$TERMUX_HOST_PLATFORM \
-		--with-extra-cflags="$CFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
-		--with-extra-cxxflags="$CXXFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1" \
-		--with-extra-ldflags="${jdk_ldflags} -landroid-shmem -landroid-spawn" \
+		--with-extra-cflags=" -w -Wno-error $CFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1 -D__ANDROID__=1" \
+		--with-extra-cxxflags=" -w -Wno-error $CXXFLAGS $CPPFLAGS -DLE_STANDALONE -DANDROID -D__TERMUX__=1  -D__ANDROID__=1" \
+		--with-extra-ldflags=" ${jdk_ldflags} -landroid-shmem -landroid-spawn" \
 		--disable-precompiled-headers \
 		--disable-warnings-as-errors \
 		--enable-option-checking=fatal \
-		--enable-headless-only=yes \
 		--with-toolchain-type=gcc \
 		--with-jvm-variants=server \
 		--with-devkit="$TERMUX_STANDALONE_TOOLCHAIN" \
@@ -75,11 +80,18 @@ termux_step_configure() {
 		--with-libpng=system \
 		--with-zlib=system \
 		--x-includes="$TERMUX_PREFIX/include/X11" \
-		--x-libraries="$TERMUX_PREFIX/lib"
+		--x-libraries="$TERMUX_PREFIX/lib" \
+		--with-x="$TERMUX_PREFIX/include/X11"
 }
 
 termux_step_make() {
-	cd build/linux-${TERMUX_ARCH/i686/x86}-server-release
+
+    cp -rf /home/builder/lib/android-ndk/sysroot/usr/include/sys/sem.h $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/include/sys/sem.h
+	cp -rf $TERMUX_PREFIX/include/sys/shm.h $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/include/sys/shm.h
+
+	export COMPILER_WARNINGS_FATAL=false
+	export CFLAGS_WARNINGS_ARE_ERRORS=
+	cd build/linux-${TERMUX_ARCH/i686/x86}-normal-server-release
 	make JOBS=1 images
 
 	# Delete created library stubs.
@@ -89,7 +101,7 @@ termux_step_make() {
 termux_step_make_install() {
 	rm -rf $TERMUX_PREFIX/opt/openjdk
 	mkdir -p $TERMUX_PREFIX/opt/openjdk
-	cp -r build/linux-${TERMUX_ARCH/i686/x86}-server-release/images/jdk/* \
+	cp -r build/linux-${TERMUX_ARCH/i686/x86}-normal-server-release/images/jdk/* \
 		$TERMUX_PREFIX/opt/openjdk/
 	find $TERMUX_PREFIX/opt/openjdk -name "*.debuginfo" -delete
 
@@ -107,11 +119,6 @@ termux_step_make_install() {
 	echo "export JAVA_HOME=$TERMUX_PREFIX/opt/openjdk" > \
 		$TERMUX_PREFIX/etc/profile.d/java.sh
 
-	# Symlink external dependencies.
-	local l
-	for l in libandroid-shmem.so libandroid-spawn.so libfreetype.so libiconv.so libz.so.1; do
-		ln -sfr $TERMUX_PREFIX/lib/$l \
-			$TERMUX_PREFIX/opt/openjdk/lib/$l
-	done
-
+    rm -f $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/include/sys/sem.h
+	rm -f $TERMUX_STANDALONE_TOOLCHAIN/sysroot/usr/include/sys/shm.h
 }
