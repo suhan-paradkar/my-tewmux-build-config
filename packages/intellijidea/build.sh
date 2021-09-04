@@ -1,8 +1,9 @@
 TERMUX_PKG_HOMEPAGE=https://jetbrains.com/idea
 TERMUX_PKG_DESCRIPTION="IntelliJ IDEA Community Edition & IntelliJ Platform"
 TERMUX_PKG_LICENSE="Apache-2.0"
-TERMUX_PKG_MAINTAINER="@termux"
+TERMUX_PKG_MAINTAINER="@suhan-paradkar"
 TERMUX_PKG_VERSION=2021.2
+TERMUX_PKG_REVISION=1
 TERMUX_PKG_SRCURL=https://download.jetbrains.com/idea/ideaIC-$TERMUX_PKG_VERSION.tar.gz
 TERMUX_PKG_SHA256=7c27799861fb1ba0d43a3565a1ec2be789e1871191be709f0e79f1e17d3571fe
 TERMUX_PKG_DEPENDS="openjdk-17"
@@ -15,7 +16,4 @@ termux_step_make_install() {
 	mkdir -p $TERMUX_PREFIX/opt/intellijidea
 	cp -r ./* $TERMUX_PREFIX/opt/intellijidea/
 	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/idea.sh $TERMUX_PREFIX/bin/idea.sh
-	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/inspect.sh $TERMUX_PREFIX/bin/inspect.sh
-	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/format.sh $TERMUX_PREFIX/bin/format.sh
-	ln -sfr $TERMUX_PREFIX/opt/intellijidea/bin/ltedit.sh $TERMUX_PREFIX/bin/ltedit.sh
 }
