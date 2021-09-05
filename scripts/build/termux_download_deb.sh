@@ -46,9 +46,8 @@ termux_download_deb() {
 	termux_download "${TERMUX_REPO_URL[${idx}-1]}/${PKG_PATH}" \
 				"${TERMUX_COMMON_CACHEDIR}-${PACKAGE_ARCH}/${DEB_FILE}" \
 				"$PKG_HASH"
-
-
 }
+
 # Make script standalone executable as well as sourceable
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]; then
 	termux_download "$@"

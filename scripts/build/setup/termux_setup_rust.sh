@@ -5,8 +5,6 @@ termux_setup_rust() {
 		CARGO_TARGET_NAME=$TERMUX_ARCH-linux-android
 	fi
 
-	export RUSTFLAGS="-C link-arg=-Wl,-rpath=$TERMUX_PREFIX/lib -C link-arg=-Wl,--enable-new-dtags"
-
 	if [ "$TERMUX_ON_DEVICE_BUILD" = "true" ]; then
 		if [ "$(dpkg-query -W -f '${db:Status-Status}\n' rust 2>/dev/null)" != "installed" ]; then
 			echo "Package 'rust' is not installed."
@@ -27,7 +25,7 @@ termux_setup_rust() {
 	local ENV_NAME=CARGO_TARGET_${CARGO_TARGET_NAME^^}_LINKER
 	ENV_NAME=${ENV_NAME//-/_}
 	export $ENV_NAME=$CC
-	export TARGET_CFLAGS="$CPPFLAGS"
+	export TARGET_CFLAGS="$CFLAGS $CPPFLAGS"
 	# This was getting applied for the host build of Rust macros or whatever, so
 	# unset it.
 	unset CFLAGS
