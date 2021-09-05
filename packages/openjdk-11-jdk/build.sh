@@ -10,7 +10,6 @@ TERMUX_PKG_BUILD_DEPENDS="cups, fontconfig, libpng, libx11, libxrender"
 TERMUX_PKG_SUGGESTS="cups, fontconfig, libx11, libxrender"
 TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_HAS_DEBUG=false
-
 TERMUX_PKG_NO_ELF_CLEANER=false
 
 export COMPILER_WARNINGS_FATAL=false
