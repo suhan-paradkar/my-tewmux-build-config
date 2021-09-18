@@ -14,6 +14,10 @@ TERMUX_PKG_BUILD_IN_SRC=true
 TERMUX_PKG_EXTRA_MAKE_ARGS="LUAAPK="
 TERMUX_PKG_CONFFILES="etc/apk/repositories"
 
+termux_step_pre_configure() {
+    CFLAGS+=" -Wno-error"
+}
+
 termux_step_post_make_install() {
     mkdir -p $TERMUX_PREFIX/etc/apk/
     echo $TERMUX_ARCH > $TERMUX_PREFIX/etc/apk/arch
