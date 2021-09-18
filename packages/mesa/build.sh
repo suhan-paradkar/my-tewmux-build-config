@@ -16,14 +16,13 @@ TERMUX_PKG_REPLACES="libmesa"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-static
 --disable-asm
---disable-gbm
+--enable-gbm
 --disable-egl
 --disable-gles1
 --disable-gles2
---disable-dri
+--enable-dri
 --disable-dri3
 --disable-llvm
---enable-glx=xlib
 --with-platforms=x11
 --without-dri-drivers
 ac_cv_header_xlocale_h=no
