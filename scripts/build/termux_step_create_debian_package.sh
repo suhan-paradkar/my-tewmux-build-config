@@ -1,4 +1,10 @@
-termux_step_create_debfile() {
+termux_step_create_debian_package() {
+	if [ "$TERMUX_PKG_METAPACKAGE" = "true" ]; then
+		# Metapackage doesn't have data inside.
+		rm -rf data
+	fi
+        tar -cJf "$TERMUX_PKG_PACKAGEDIR/data.tar.xz" -H gnu .
+
 	# Get install size. This will be written as the "Installed-Size" deb field so is measured in 1024-byte blocks:
 	local TERMUX_PKG_INSTALLSIZE
 	TERMUX_PKG_INSTALLSIZE=$(du -sk . | cut -f 1)
@@ -34,14 +40,14 @@ termux_step_create_debfile() {
 	cd DEBIAN
 	termux_step_create_debscripts
 
-	# Create control.tar.gz
-	tar -czf "$TERMUX_PKG_PACKAGEDIR/control.tar.gz" -H gnu .
+	# Create control.tar.xz
+	tar -cJf "$TERMUX_PKG_PACKAGEDIR/control.tar.xz" -H gnu .
 
 	test ! -f "$TERMUX_COMMON_CACHEDIR/debian-binary" && echo "2.0" > "$TERMUX_COMMON_CACHEDIR/debian-binary"
-	TERMUX_PKG_DEBFILE=$TERMUX_DEBDIR/${TERMUX_PKG_NAME}${DEBUG}_${TERMUX_PKG_FULLVERSION}_${TERMUX_ARCH}.deb
+	TERMUX_PKG_DEBFILE=$TERMUX_OUTPUT_DIR/${TERMUX_PKG_NAME}${DEBUG}_${TERMUX_PKG_FULLVERSION}_${TERMUX_ARCH}.deb
 	# Create the actual .deb file:
 	ar cr "$TERMUX_PKG_DEBFILE" \
 	       "$TERMUX_COMMON_CACHEDIR/debian-binary" \
-	       "$TERMUX_PKG_PACKAGEDIR/control.tar.gz" \
+	       "$TERMUX_PKG_PACKAGEDIR/control.tar.xz" \
 	       "$TERMUX_PKG_PACKAGEDIR/data.tar.xz"
 }

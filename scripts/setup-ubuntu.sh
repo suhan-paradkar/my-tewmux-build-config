@@ -8,7 +8,6 @@ PACKAGES+=" locales"
 
 # To provide /usr/bin/python as symlink to /usr/bin/python3
 PACKAGES+=" python-is-python3"
-PACKAGES+=" openjdk-11-jdk"
 
 # Used by build-package.sh and CI/CD scripts.
 PACKAGES+=" curl"
