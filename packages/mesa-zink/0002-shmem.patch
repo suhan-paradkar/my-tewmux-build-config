@@ -1,0 +1,13 @@
+diff -uNr mesa/meson.build mesa.mod/meson.build
+--- mesa/meson.build	2021-09-24 02:03:24.469527699 +0000
++++ mesa.mod/meson.build	2021-09-24 02:07:13.404429904 +0000
+@@ -32,9 +32,6 @@
+ cc = meson.get_compiler('c')
+ cpp = meson.get_compiler('cpp')
+ dep_a = cc.find_library('android-shmem', required : false, static : true)
+-if not dep_a.found()
+-  error('use pkg install libandroid-shmem-static')
+-endif
+ dep_l = cc.find_library('log', required : true, static : false)
+ 
+ null_dep = dependency('', required : false)
