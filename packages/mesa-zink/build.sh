@@ -5,11 +5,11 @@ TERMUX_PKG_MAINTAINER="@suhan-paradkar"
 TERMUX_PKG_VERSION=21.2
 TERMUX_PKG_GIT_BRANCH=main
 TERMUX_PKG_SRCURL=https://gitlab.freedesktop.org/mesa/mesa.git
-TERMUX_PKG_DEPENDS="libandroid-shmem, libexpat, libdrm, libx11, libxdamage, libxext, libxml2, libxshmfence, zlib, libandroid-shmem-static, libllvm, llvm"
+TERMUX_PKG_DEPENDS="libandroid-shmem, libexpat, libdrm, libx11, libxdamage, libxext, libxml2, libxshmfence, zlib, libandroid-shmem-static"
 TERMUX_PKG_BUILD_DEPENDS="xorgproto"
 TERMUX_PKG_CONFLICTS="libmesa, mesa"
 TERMUX_PKG_REPLACES="libmesa"
-
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-Dllvm=disabled"
 termux_step_get_source() {
 	git clone $TERMUX_PKG_SRCURL $TERMUX_PKG_SRCDIR -b $TERMUX_PKG_GIT_BRANCH
 }
