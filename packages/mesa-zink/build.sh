@@ -22,6 +22,7 @@ termux_step_post_get_source() {
 termux_step_pre_configure() {
 	rm -rf $TERMUX_PKG_SRCDIR/configure
 	export LIBS="-landroid-shmem -latomic"
+	CFLAGS+="-Wno-error"
 }
 
 termux_step_post_massage() {
