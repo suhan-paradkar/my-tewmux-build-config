@@ -22,7 +22,7 @@ termux_step_post_get_source() {
 
 termux_step_pre_configure() {
 	rm -rf $TERMUX_PKG_SRCDIR/configure
-	export LIBS="-landroid-shmem -latomic"
+	export LIBS="-landroid-shmem -latomic -lXxf86vm"
 }
 
 termux_step_post_massage() {
