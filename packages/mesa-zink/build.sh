@@ -9,7 +9,8 @@ TERMUX_PKG_DEPENDS="libandroid-shmem, libexpat, libdrm, libx11, libxdamage, libx
 TERMUX_PKG_BUILD_DEPENDS="xorgproto"
 TERMUX_PKG_CONFLICTS="libmesa, mesa"
 TERMUX_PKG_REPLACES="libmesa"
-TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-Dllvm=disabled"
+TERMUX_PKG_EXTRA_CONFIGURE_ARGS="-Dllvm=disabled \
+				 -Dgallium-drivers=zink"
 termux_step_get_source() {
 	git clone $TERMUX_PKG_SRCURL $TERMUX_PKG_SRCDIR -b $TERMUX_PKG_GIT_BRANCH
 }
