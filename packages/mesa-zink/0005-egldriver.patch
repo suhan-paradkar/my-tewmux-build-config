@@ -1,0 +1,19 @@
+diff -uNr mesa/src/egl/main/eglapi.c mesa.mod/src/egl/main/eglapi.c
+--- mesa/src/egl/main/eglapi.c	2021-09-24 02:02:59.052427983 +0000
++++ mesa.mod/src/egl/main/eglapi.c	2021-09-24 10:33:10.171951273 +0000
+@@ -632,15 +632,6 @@
+        * Initialize the display using the driver's function.
+        * If the initialisation fails, try again using only software rendering.
+        */
+-      if (!_eglDriver.Initialize(disp)) {
+-         if (disp->Options.ForceSoftware)
+-            RETURN_EGL_ERROR(disp, EGL_NOT_INITIALIZED, EGL_FALSE);
+-         else {
+-            disp->Options.ForceSoftware = EGL_TRUE;
+-            if (!_eglDriver.Initialize(disp))
+-               RETURN_EGL_ERROR(disp, EGL_NOT_INITIALIZED, EGL_FALSE);
+-         }
+-      }
+ 
+       disp->Initialized = EGL_TRUE;
+       disp->Driver = &_eglDriver;
