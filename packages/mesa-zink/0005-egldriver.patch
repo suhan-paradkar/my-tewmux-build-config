@@ -1,6 +1,6 @@
 diff -uNr mesa/src/egl/main/eglapi.c mesa.mod/src/egl/main/eglapi.c
 --- mesa/src/egl/main/eglapi.c	2021-09-24 02:02:59.052427983 +0000
-+++ mesa.mod/src/egl/main/eglapi.c	2021-09-25 02:18:55.142397993 +0000
++++ mesa.mod/src/egl/main/eglapi.c	2021-09-25 02:33:03.305362529 +0000
 @@ -166,9 +166,6 @@
     _EGL_CHECK_OBJECT(disp, Sync, s, ret)
  
@@ -11,7 +11,7 @@ diff -uNr mesa/src/egl/main/eglapi.c mesa.mod/src/egl/main/eglapi.c
  struct _egl_entrypoint {
     const char *name;
     _EGLProc function;
-@@ -632,15 +629,6 @@
+@@ -632,18 +629,8 @@
         * Initialize the display using the driver's function.
         * If the initialisation fails, try again using only software rendering.
         */
@@ -26,4 +26,17 @@ diff -uNr mesa/src/egl/main/eglapi.c mesa.mod/src/egl/main/eglapi.c
 -      }
  
        disp->Initialized = EGL_TRUE;
-       disp->Driver = &_eglDriver;
+-      disp->Driver = &_eglDriver;
+ 
+       /* limit to APIs supported by core */
+       disp->ClientAPIs &= _EGL_API_ALL_BITS;
+@@ -2740,9 +2727,6 @@
+          ret = entrypoint->function;
+    }
+ 
+-   if (!ret && _eglDriver.GetProcAddress)
+-      ret = _eglDriver.GetProcAddress(procname);
+-
+    RETURN_EGL_SUCCESS(NULL, ret);
+ }
+ 
