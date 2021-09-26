@@ -1,0 +1,192 @@
+diff --git a/bin/install_megadrivers.py b/bin/install_megadrivers.py
+index 0a28dd7..2c6ab26 100644
+--- a/bin/install_megadrivers.py
++++ b/bin/install_megadrivers.py
+@@ -24,7 +24,15 @@
+ 
+ from __future__ import print_function
+ import argparse
+-import os
++import os, shutil
++def link(src, dest):
++    shutil.copyfile(src, dest)
++
++def unlink(src):
++    os.remove(src)
++
++os.link = link
++os.unlink = unlink
+ 
+ 
+ def main():
+diff --git a/meson.build b/meson.build
+index bfd1ecb..08afd30 100644
+--- a/meson.build
++++ b/meson.build
+@@ -1033,7 +1033,6 @@ if cc.get_id() == 'msvc'
+   endforeach
+ else
+   _trial = [
+-    '-Werror=implicit-function-declaration',
+     '-Werror=missing-prototypes',
+     '-Werror=return-type',
+     '-Werror=empty-body',
+@@ -1058,8 +1057,6 @@ else
+   endforeach
+ 
+   _trial = [
+-    '-Werror=return-type',
+-    '-Werror=empty-body',
+     '-Wno-non-virtual-dtor',
+     '-Wno-missing-field-initializers',
+     '-Wno-format-truncation',
+@@ -1091,14 +1088,6 @@ else
+   # Check for C and C++ arguments for MSVC compatibility. These are only used
+   # in parts of the mesa code base that need to compile with MSVC, mainly
+   # common code
+-  foreach a : ['-Werror=pointer-arith', '-Werror=gnu-empty-initializer']
+-    if cc.has_argument(a)
+-      c_msvc_compat_args += a
+-    endif
+-    if cpp.has_argument(a)
+-      cpp_msvc_compat_args += a
+-    endif
+-  endforeach
+ 
+   if cc.has_argument('-Wmicrosoft-enum-value')  # Clang
+     c_args += '-Wno-microsoft-enum-value'
+diff --git a/src/gallium/drivers/zink/zink_screen.c b/src/gallium/drivers/zink/zink_screen.c
+index 35a33a6..4d98b04 100644
+--- a/src/gallium/drivers/zink/zink_screen.c
++++ b/src/gallium/drivers/zink/zink_screen.c
+@@ -20,7 +20,6 @@
+  * OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE
+  * USE OR OTHER DEALINGS IN THE SOFTWARE.
+  */
+-
+ #include "zink_screen.h"
+ 
+ #include "zink_compiler.h"
+diff --git a/src/gallium/drivers/zink/zink_screen.h b/src/gallium/drivers/zink/zink_screen.h
+index 1443bab..0f3d3c1 100644
+--- a/src/gallium/drivers/zink/zink_screen.h
++++ b/src/gallium/drivers/zink/zink_screen.h
+@@ -31,7 +31,7 @@
+ #include "util/slab.h"
+ #include "compiler/nir/nir.h"
+ 
+-#include <vulkan/vulkan.h>
++#include <vulkan/vulkan_android.h>
+ 
+ #if defined(__APPLE__)
+ // Source of MVK_VERSION
+diff --git a/src/gallium/targets/dri/target.c b/src/gallium/targets/dri/target.c
+index 64e2fa4..30c9ee9 100644
+--- a/src/gallium/targets/dri/target.c
++++ b/src/gallium/targets/dri/target.c
+@@ -3,18 +3,12 @@
+ 
+ #include "dri_screen.h"
+ 
+-/*
+-
+-   globalDriverAPI = &galliumdrm_driver_api;                              \
+-   return galliumdrm_driver_extensions;                                  \
+-*/
+-
+ #define DEFINE_LOADER_DRM_ENTRYPOINT(drivername)                          \
+ const __DRIextension **__driDriverGetExtensions_##drivername(void);       \
+ PUBLIC const __DRIextension **__driDriverGetExtensions_##drivername(void) \
+ {                                                                         \
+-   printf("STUB: __driDriverGetExtensions\n"); \
+-   return NULL; \
++   globalDriverAPI = &galliumdrm_driver_api;                              \
++   return galliumdrm_driver_extensions;                                   \
+ }
+ 
+ #if defined(GALLIUM_SOFTPIPE)
+@@ -23,10 +17,8 @@ const __DRIextension **__driDriverGetExtensions_swrast(void);
+ 
+ PUBLIC const __DRIextension **__driDriverGetExtensions_swrast(void)
+ {
+-   // globalDriverAPI = &galliumsw_driver_api;
+-   // return galliumsw_driver_extensions;
+-   printf("STUB: __driDriverGetExtensions_swrast\n");
+-   return NULL;
++   globalDriverAPI = &galliumsw_driver_api;
++   return galliumsw_driver_extensions;
+ }
+ 
+ #if defined(HAVE_LIBDRM)
+@@ -50,6 +42,10 @@ DEFINE_LOADER_DRM_ENTRYPOINT(i915)
+ DEFINE_LOADER_DRM_ENTRYPOINT(iris)
+ #endif
+ 
++#if defined(GALLIUM_CROCUS)
++DEFINE_LOADER_DRM_ENTRYPOINT(crocus)
++#endif
++
+ #if defined(GALLIUM_NOUVEAU)
+ DEFINE_LOADER_DRM_ENTRYPOINT(nouveau)
+ #endif
+@@ -108,6 +104,8 @@ DEFINE_LOADER_DRM_ENTRYPOINT(ili9341)
+ DEFINE_LOADER_DRM_ENTRYPOINT(imx_drm)
+ DEFINE_LOADER_DRM_ENTRYPOINT(imx_dcss)
+ DEFINE_LOADER_DRM_ENTRYPOINT(ingenic_drm)
++DEFINE_LOADER_DRM_ENTRYPOINT(kirin)
++DEFINE_LOADER_DRM_ENTRYPOINT(mali_dp)
+ DEFINE_LOADER_DRM_ENTRYPOINT(mcde)
+ DEFINE_LOADER_DRM_ENTRYPOINT(mediatek)
+ DEFINE_LOADER_DRM_ENTRYPOINT(meson)
+@@ -126,7 +124,7 @@ DEFINE_LOADER_DRM_ENTRYPOINT(sun4i_drm)
+ DEFINE_LOADER_DRM_ENTRYPOINT(lima)
+ #endif
+ 
+-#if defined(GALLIUM_ZINK)
++#if defined(GALLIUM_ZINK) && !defined(__APPLE__)
+ DEFINE_LOADER_DRM_ENTRYPOINT(zink);
+ #endif
+ 
+diff --git a/src/glx/meson.build b/src/glx/meson.build
+index 1306f7b..89d7403 100644
+--- a/src/glx/meson.build
++++ b/src/glx/meson.build
+@@ -73,9 +73,6 @@ files_libglx = files(
+   'xfont.c',
+ )
+ 
+-if with_platform_android or host_machine.system() == 'darwin'
+-dep_xdamage = null_dep
+-endif
+ 
+ extra_libs_libglx = []
+ extra_deps_libgl = []
+@@ -161,7 +158,7 @@ libgl = shared_library(
+   link_args : [ld_args_bsymbolic, ld_args_gc_sections, extra_ld_args_libgl],
+   dependencies : [
+     dep_libdrm, dep_dl, dep_m, dep_thread, dep_x11, dep_xcb_glx, dep_xcb,
+-    dep_x11_xcb, dep_xcb_dri2, dep_xext, dep_xfixes, dep_xdamage, dep_xxf86vm,
++    dep_x11_xcb, dep_xcb_dri2, dep_xext, dep_xfixes, dep_xxf86vm,
+     dep_xcb_shm, extra_deps_libgl,
+   ],
+   version : gl_lib_version,
+diff --git a/src/vulkan/wsi/wsi_common_display.c b/src/vulkan/wsi/wsi_common_display.c
+index e25dc1a..5746653 100644
+--- a/src/vulkan/wsi/wsi_common_display.c
++++ b/src/vulkan/wsi/wsi_common_display.c
+@@ -1207,7 +1207,6 @@ wsi_display_wait_thread(void *data)
+       .events = POLLIN
+    };
+ 
+-   pthread_setcanceltype(PTHREAD_CANCEL_ASYNCHRONOUS, NULL);
+    for (;;) {
+       int ret = poll(&pollfd, 1, -1);
+       if (ret > 0) {
+@@ -1237,7 +1236,6 @@ wsi_display_stop_wait_thread(struct wsi_display *wsi)
+ {
+    pthread_mutex_lock(&wsi->wait_mutex);
+    if (wsi->wait_thread) {
+-      pthread_cancel(wsi->wait_thread);
+       pthread_join(wsi->wait_thread, NULL);
+       wsi->wait_thread = 0;
+    }
