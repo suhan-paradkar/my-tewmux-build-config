@@ -1,21 +1,21 @@
-diff -uNr xorgproto-2021.5/meson.build xorgproto-2021.5.mod/meson.build
---- xorgproto-2021.5/meson.build	2021-09-15 15:57:52.000000000 +0000
-+++ xorgproto-2021.5.mod/meson.build	2021-09-22 02:55:00.876456101 +0000
-@@ -62,7 +62,7 @@
-     configure_file(
-         input : pc + '.pc.in',
-         output : pc + '.pc',
+diff -uNr xorgproto-2019.1/meson.build xorgproto-2019.1.mod/meson.build
+--- xorgproto-2019.1/meson.build	2019-06-20 06:13:03.000000000 +0300
++++ xorgproto-2019.1.mod/meson.build	2019-06-29 22:00:10.215053101 +0300
+@@ -68,7 +68,7 @@
+         filebase : pc[0],
+         description : pc[0] + ' headers',
+         version : pc[1],
 -        install_dir : get_option('datadir') + '/pkgconfig',
 +        install_dir : '@TERMUX_PREFIX@/lib/pkgconfig',
-         configuration : pc_data,
+         subdirs : subdir,
      )
  endforeach
-@@ -100,7 +100,7 @@
-         configure_file(
-             input : pc + '.pc.in',
-             output : pc + '.pc',
--            install_dir : get_option('datadir') + '/pkgconfig',
-+            install_dir : '@TERMUX_PREFIX@/lib/pkgconfig',
-             configuration : pc_data,
+@@ -88,7 +88,7 @@
+             filebase : pc[0],
+             description : pc[0] + ' headers',
+             version : pc[1],
+-            install_dir : get_option('datadir') + '/pkgconfig'
++            install_dir : '@TERMUX_PREFIX@/lib/pkgconfig'
          )
      endforeach
+ endif

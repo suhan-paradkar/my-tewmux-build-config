@@ -1,7 +1,7 @@
 TERMUX_PKG_HOMEPAGE=https://www.mesa3d.org
 TERMUX_PKG_DESCRIPTION="An open-source implementation of the OpenGL specification"
 TERMUX_PKG_LICENSE="MIT"
-TERMUX_PKG_MAINTAINER="@termux"
+TERMUX_PKG_MAINTAINER="Leonid Pliushch <leonid.pliushch@gmail.com>"
 ## Use 17.3.x branch because 18.x.x requires 'pthread_barrier_t'.
 TERMUX_PKG_VERSION=17.3.9
 TERMUX_PKG_REVISION=34
@@ -16,17 +16,15 @@ TERMUX_PKG_REPLACES="libmesa"
 TERMUX_PKG_EXTRA_CONFIGURE_ARGS="
 --disable-static
 --disable-asm
---disable-gbm
+--enable-gbm
 --disable-egl
 --disable-gles1
 --disable-gles2
---disable-dri
+--enable-dri
 --disable-dri3
 --disable-llvm
---enable-glx=xlib
 --with-platforms=x11
 --without-dri-drivers
---without-gallium-drivers
 ac_cv_header_xlocale_h=no
 "
 
